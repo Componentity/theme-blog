@@ -18,10 +18,16 @@ function Page({ page }) {
         <div>
           <h1>{page[0].title.rendered}</h1>
           <hr />
-          <img
-            src={page[0]._embedded[`wp:featuredmedia`][0].media_details.sizes.full.source_url}
-            alt=''
-          />
+          {page[0].featured_media ? (
+            <Image
+              height={400}
+              width={900}
+              src={page[0]._embedded['wp:featuredmedia'][0].source_url}
+              alt=''
+            />
+          ) : (
+            <p>No Image</p>
+          )}
           <article dangerouslySetInnerHTML={{ __html: page[0].content.rendered }} />
         </div>
       )}
