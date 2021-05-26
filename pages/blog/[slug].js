@@ -53,7 +53,7 @@ function Post({ post, cats, tags }) {
             })}
           </ul>
           <hr />
-          {post[0].featured_media ? (
+          {post[0].featured_media && post[0].featured_media ? (
             <Image
               height={400}
               width={900}

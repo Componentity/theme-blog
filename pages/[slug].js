@@ -18,7 +18,7 @@ function Page({ page }) {
         <div>
           <h1>{page[0].title.rendered}</h1>
           <hr />
-          {page[0].featured_media ? (
+          {page[0].featured_media && page[0].featured_media !== 0 ? (
             <Image
               height={400}
               width={900}
