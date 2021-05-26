@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import Posts from './../../components/Posts'
 
 function Author({ author, posts }) {
@@ -13,8 +12,8 @@ function Author({ author, posts }) {
 
   return (
     <>
-      {author === null ? (
-        <h1>Not found</h1>
+      {author.length === 0 ? (
+        <h1>My Custom 404 Page</h1>
       ) : (
         <div>
           <h1>{author[0].name}</h1>
@@ -32,7 +31,7 @@ export default Author
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/users?_embed=true`)
+  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/users`)
   const authors = await res.json()
 
   const slugs = []
@@ -58,10 +57,14 @@ export async function getStaticProps({ params }) {
   const author = await res.json()
 
   // get posts of this author
-  const author_id = author[0].id
-  const author_posts = await fetch(`https://reporterly.net/wp-json/wp/v2/posts?author=${author_id}`)
-  const posts = await author_posts.json()
-
+  let posts = null
+  if (author.length > 0) {
+    const author_id = author[0].id
+    const author_posts = await fetch(
+      `https://reporterly.net/wp-json/wp/v2/posts?author=${author_id}`
+    )
+    posts = await author_posts.json()
+  }
   // Pass post data to the page via props
   return {
     props: { author, posts },
