@@ -60,7 +60,7 @@ export async function getStaticProps({ params }) {
   // If the route is like /pages/1, then params.id is 1
   const { slug } = params
 
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/pages?slug=${slug}`)
+  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/pages?_embeded=true&slug=${slug}`)
   const page = await res.json()
 
   // Pass page data to the page via props
