@@ -108,6 +108,8 @@ export default function Posts({
       )
     } else if (type == 'pagination') {
       return <PaginationButtons />
+    } else if (type == 'infinite') {
+      return loading ? <p>Loading...</p> : ''
     }
     return ''
   }

@@ -20,7 +20,13 @@ function Author({ author, posts, author_id, total_pages }) {
           <hr />
           <article dangerouslySetInnerHTML={{ __html: author[0].description.rendered }} />
           <hr />
-          <Posts posts={posts} type='author' type_id={author_id} totalPages={total_pages} />
+          <Posts
+            posts={posts}
+            type='author'
+            type_id={author_id}
+            totalPages={total_pages}
+            paginationStyle='infinite'
+          />
         </div>
       )}
     </>
