@@ -12,6 +12,7 @@
     "next": "10.2.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "swr": "^0.5.6"
+    "swr": "^0.5.6",
+    "@appbaseio/reactivesearch": "3.18.0"
   }
 }
