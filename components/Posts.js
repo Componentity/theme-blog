@@ -32,7 +32,7 @@ export default function Posts({
 
   // trigger loadmore (update page number)
   function updatePage() {
-    console.log('UPDATING NUMBER...')
+    // console.log('UPDATING NUMBER...')
     setLoading(true)
     return setPage(page + 1)
   }
@@ -61,8 +61,8 @@ export default function Posts({
     if (page >= totalPages) {
       setDisable(true)
     }
-    console.log('Total', totalPages)
-    console.log('Current Page', page)
+    // console.log('Total', totalPages)
+    // console.log('Current Page', page)
   }, [page])
 
   // ========================================================
@@ -96,22 +96,37 @@ export default function Posts({
   }
 
   // =============================================
-  // LOAD MORE BUTTON OR PAGINATION
+  // LOAD MORE BUTTON OR PAGINATION COMPONENT
   // =============================================
 
   function Pagination({ type }) {
     if (type == 'loadmore') {
-      return (
-        <button disabled={disable} onClick={updatePage} type='button'>
-          {loading ? 'Loading...' : 'Load more'}
-        </button>
-      )
+      return <Loadmore />
     } else if (type == 'pagination') {
       return <PaginationButtons />
     } else if (type == 'infinite') {
-      return loading ? <p>Loading...</p> : ''
+      return <InfiniteLoader />
     }
     return ''
+  }
+
+  // ===================================
+  // INFINITE LOADING COMPONENT
+  // ===================================
+  function InfiniteLoader() {
+    return loading ? <p>Loading...</p> : ''
+  }
+
+  // ===================================
+  // LOADMORE BUTTON COMPONENT
+  // =====================================
+
+  function Loadmore() {
+    return (
+      <button disabled={disable} onClick={updatePage} type='button'>
+        {loading ? 'Loading...' : 'Load more'}
+      </button>
+    )
   }
 
   // ================================
