@@ -64,7 +64,7 @@ function Post({ post, cats, tags }) {
             <p>No Image</p>
           )}
           <hr />
-          {post[0].content.rendered}
+          <article dangerouslySetInnerHTML={{ __html: post[0].content.rendered }} />
         </div>
       )}
     </>

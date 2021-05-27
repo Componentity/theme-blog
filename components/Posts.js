@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-async function getNewPostsFromApi(page = 2, type = 'categories', type_id = 1) {
+async function getNewPostsFromApi(page, type, type_id) {
   const id = type_id
   const res = await fetch(
     `https://reporterly.net/wp-json/wp/v2/posts?${type}=${id}&_embed=true&page=${page}`
@@ -10,13 +10,7 @@ async function getNewPostsFromApi(page = 2, type = 'categories', type_id = 1) {
   return await res.json()
 }
 
-export default function Posts({
-  posts,
-  type,
-  type_id,
-  totalPages,
-  paginationStyle = 'pagination'
-}) {
+export default function Posts({ posts, type, type_id, totalPages = 1, paginationStyle }) {
   const router = useRouter()
   if (router.isFallback) {
     return <div>Loading...</div>

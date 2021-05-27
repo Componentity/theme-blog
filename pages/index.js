@@ -1,17 +1,11 @@
 import React from 'react'
-import Link from 'next/link'
+import Posts from './../components/Posts'
+
+// show 5 posts of this category
+// show 3 posts of this author
+// show 4 posts latest
 export default function Blog({ posts }) {
-  return (
-    <ul>
-      {posts.map((post) => (
-        <li key={post.id}>
-          <Link href={`/blog/${encodeURIComponent(post.slug)}`}>
-            <a>{post.title.rendered}</a>
-          </Link>
-        </li>
-      ))}
-    </ul>
-  )
+  return <Posts posts={posts} />
 }
 
 export async function getStaticProps() {
