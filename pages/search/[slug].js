@@ -22,11 +22,11 @@ export default Search
 // This function gets called at build time
 export async function getStaticPaths() {
   const res = await fetch(`https://reporterly.net/wp-json/wp/v2/posts?_embed=true`)
-  const categories = await res.json()
+  const posts = await res.json()
 
   const slugs = []
-  categories.forEach((category) => {
-    slugs.push({ params: { slug: category.slug } })
+  posts.forEach((post) => {
+    slugs.push({ params: { slug: post.slug } })
   })
 
   return {
