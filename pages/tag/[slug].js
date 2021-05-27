@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import Posts from './../../components/Posts'
 
-function Tag({ tags, posts }) {
+function Tag({ tags, posts, tag_id, total_pages }) {
   const router = useRouter()
 
   // If the page is not yet generated, this will be displayed
@@ -20,7 +20,7 @@ function Tag({ tags, posts }) {
           <hr />
           <article dangerouslySetInnerHTML={{ __html: tags[0].description }} />
           <hr />
-          <Posts posts={posts} />
+          <Posts posts={posts} type='tags' type_id={tag_id} totalPages={total_pages} />
         </div>
       )}
     </>
@@ -53,15 +53,18 @@ export async function getStaticProps({ params }) {
 
   // get posts of this tag
   let posts = null
+  let tag_id = null
+  let total_pages = null
   if (tags.length > 0) {
-    const tag_id = tags[0].id
+    tag_id = tags[0].id
     const tag_posts = await fetch(`https://reporterly.net/wp-json/wp/v2/posts?tags=${tag_id}`)
     posts = await tag_posts.json()
+    total_pages = tag_posts.headers.get('X-WP-TotalPages')
   }
 
   // Pass post data to the page via props
   return {
-    props: { tags, posts },
+    props: { tags, posts, tag_id, total_pages },
     // Re-generate the post at most once per second
     // if a request comes in
     revalidate: 1

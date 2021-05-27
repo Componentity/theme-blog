@@ -37,8 +37,7 @@ export default function Posts({ posts, type, type_id, totalPages }) {
   }, [page])
 
   useEffect(() => {
-    if (page == totalPages) {
-      console.log('EQUAL')
+    if (page >= totalPages) {
       setDisable(true)
     }
     console.log('Total', totalPages)
@@ -47,8 +46,8 @@ export default function Posts({ posts, type, type_id, totalPages }) {
 
   return (
     <>
-      {blogs === null ? (
-        <h1>Not found</h1>
+      {blogs.length == 0 ? (
+        <h1>No Results found</h1>
       ) : (
         <div>
           <h1>All Posts</h1>

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import Posts from './../../components/Posts'
 
-function Author({ author, posts }) {
+function Author({ author, posts, author_id, total_pages }) {
   const router = useRouter()
 
   // If the page is not yet generated, this will be displayed
@@ -20,7 +20,7 @@ function Author({ author, posts }) {
           <hr />
           <article dangerouslySetInnerHTML={{ __html: author[0].description.rendered }} />
           <hr />
-          <Posts posts={posts} />
+          <Posts posts={posts} type='author' type_id={author_id} totalPages={total_pages} />
         </div>
       )}
     </>
@@ -58,16 +58,19 @@ export async function getStaticProps({ params }) {
 
   // get posts of this author
   let posts = null
+  let total_pages = null
+  let author_id = null
   if (author.length > 0) {
-    const author_id = author[0].id
+    author_id = author[0].id
     const author_posts = await fetch(
       `https://reporterly.net/wp-json/wp/v2/posts?author=${author_id}`
     )
     posts = await author_posts.json()
+    total_pages = author_posts.headers.get('X-WP-TotalPages')
   }
   // Pass post data to the page via props
   return {
-    props: { author, posts },
+    props: { author, posts, author_id, total_pages },
     // Re-generate the post at most once per second
     // if a request comes in
     revalidate: 1
