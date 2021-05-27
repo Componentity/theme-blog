@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import Posts from './../../components/Posts'
 
-function Category({ categories, posts }) {
+function Category({ categories, posts, category_id, total_pages }) {
   const router = useRouter()
 
   // If the page is not yet generated, this will be displayed
@@ -20,7 +20,7 @@ function Category({ categories, posts }) {
           <hr />
           <article dangerouslySetInnerHTML={{ __html: categories[0].description }} />
           <hr />
-          <Posts posts={posts} />
+          <Posts posts={posts} type='categories' type_id={category_id} totalPages={total_pages} />
         </div>
       )}
     </>
@@ -53,17 +53,20 @@ export async function getStaticProps({ params }) {
 
   // get posts of this category
   let posts = null
+  let category_id = null
+  let total_pages = null
   if (categories.length > 0) {
-    const category_id = categories[0].id
+    category_id = categories[0].id
     const cat_posts = await fetch(
       `https://reporterly.net/wp-json/wp/v2/posts?categories=${category_id}&_embed=true`
     )
     posts = await cat_posts.json()
+    total_pages = cat_posts.headers.get('X-WP-TotalPages')
   }
 
   // Pass post data to the page via props
   return {
-    props: { categories, posts },
+    props: { categories, posts, category_id, total_pages },
     // Re-generate the post at most once per second
     // if a request comes in
     revalidate: 1
