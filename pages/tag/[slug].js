@@ -20,7 +20,13 @@ function Tag({ tags, posts, tag_id, total_pages }) {
           <hr />
           <article dangerouslySetInnerHTML={{ __html: tags[0].description }} />
           <hr />
-          <Posts posts={posts} type='tags' type_id={tag_id} totalPages={total_pages} />
+          <Posts
+            posts={posts}
+            type='tags'
+            type_id={tag_id}
+            totalPages={total_pages}
+            paginationStyle='loadmore'
+          />
         </div>
       )}
     </>

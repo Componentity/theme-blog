@@ -20,7 +20,13 @@ function Category({ categories, posts, category_id, total_pages }) {
           <hr />
           <article dangerouslySetInnerHTML={{ __html: categories[0].description }} />
           <hr />
-          <Posts posts={posts} type='categories' type_id={category_id} totalPages={total_pages} />
+          <Posts
+            posts={posts}
+            type='categories'
+            type_id={category_id}
+            totalPages={total_pages}
+            paginationStyle='pagination'
+          />
         </div>
       )}
     </>
