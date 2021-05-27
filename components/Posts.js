@@ -10,7 +10,15 @@ async function getNewPostsFromApi(page, type, type_id) {
   return await res.json()
 }
 
-export default function Posts({ posts, type, type_id, totalPages = 1, paginationStyle }) {
+export default function Posts({
+  posts,
+  title,
+  slug,
+  type,
+  type_id,
+  totalPages = 1,
+  paginationStyle
+}) {
   const router = useRouter()
   if (router.isFallback) {
     return <div>Loading...</div>
@@ -23,6 +31,23 @@ export default function Posts({ posts, type, type_id, totalPages = 1, pagination
   //   console.log(posts)
 
   const isInitialMount = useRef(true)
+
+  let type_url
+  switch (type) {
+    case 'categories':
+      type_url = 'category'
+      break
+    case 'author':
+      type_url = 'author'
+      break
+    case 'tags':
+      type_url = 'tag'
+      break
+
+    default:
+      type_url = 'category'
+      break
+  }
 
   // trigger loadmore (update page number)
   function updatePage() {
@@ -203,7 +228,15 @@ export default function Posts({ posts, type, type_id, totalPages = 1, pagination
         <h1>No Results found</h1>
       ) : (
         <div>
-          <h1>All Posts</h1>
+          {title && slug ? (
+            <Link href={`/${type_url}/${slug}`}>
+              <a>
+                <h1>{title}</h1>
+              </a>
+            </Link>
+          ) : (
+            ''
+          )}
           <ol className='blog-list'>
             {blogs.map((blog) => {
               return (
@@ -216,7 +249,7 @@ export default function Posts({ posts, type, type_id, totalPages = 1, pagination
             })}
           </ol>
           <hr />
-          <Pagination type={paginationStyle} />
+          {paginationStyle ? <Pagination type={paginationStyle} /> : ''}
           <hr />
         </div>
       )}
