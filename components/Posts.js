@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-async function getNewPostsFromApi(page = 2, type = 'categories', type_id = 1) {
+async function getNewPostsFromApi(page, type, type_id) {
   const id = type_id
   const res = await fetch(
     `https://reporterly.net/wp-json/wp/v2/posts?${type}=${id}&_embed=true&page=${page}`
@@ -12,10 +12,12 @@ async function getNewPostsFromApi(page = 2, type = 'categories', type_id = 1) {
 
 export default function Posts({
   posts,
+  title,
+  slug,
   type,
   type_id,
-  totalPages,
-  paginationStyle = 'pagination'
+  totalPages = 1,
+  paginationStyle
 }) {
   const router = useRouter()
   if (router.isFallback) {
@@ -29,6 +31,23 @@ export default function Posts({
   //   console.log(posts)
 
   const isInitialMount = useRef(true)
+
+  let type_url
+  switch (type) {
+    case 'categories':
+      type_url = 'category'
+      break
+    case 'author':
+      type_url = 'author'
+      break
+    case 'tags':
+      type_url = 'tag'
+      break
+
+    default:
+      type_url = 'category'
+      break
+  }
 
   // trigger loadmore (update page number)
   function updatePage() {
@@ -209,7 +228,15 @@ export default function Posts({
         <h1>No Results found</h1>
       ) : (
         <div>
-          <h1>All Posts</h1>
+          {title && slug ? (
+            <Link href={`/${type_url}/${slug}`}>
+              <a>
+                <h1>{title}</h1>
+              </a>
+            </Link>
+          ) : (
+            ''
+          )}
           <ol className='blog-list'>
             {blogs.map((blog) => {
               return (
@@ -222,7 +249,7 @@ export default function Posts({
             })}
           </ol>
           <hr />
-          <Pagination type={paginationStyle} />
+          {paginationStyle ? <Pagination type={paginationStyle} /> : ''}
           <hr />
         </div>
       )}
