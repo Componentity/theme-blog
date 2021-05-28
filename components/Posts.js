@@ -37,15 +37,12 @@ export default function Posts({
     case 'categories':
       type_url = 'category'
       break
-    case 'author':
-      type_url = 'author'
-      break
     case 'tags':
       type_url = 'tag'
       break
 
     default:
-      type_url = 'category'
+      type_url = type
       break
   }
 
@@ -60,6 +57,7 @@ export default function Posts({
   useEffect(async () => {
     if (isInitialMount.current) {
       isInitialMount.current = false
+      console.log('CURRENT')
     } else {
       const newPosts = await getNewPostsFromApi(page, type, type_id)
       if (newPosts.length > 0) {
@@ -74,6 +72,12 @@ export default function Posts({
       setLoading(false)
     }
   }, [page])
+
+  useEffect(() => {
+    console.log('ON ROUTER USE EFFECT')
+    setBlogs(posts)
+    setPage(1)
+  }, [router])
 
   // disable loadmore
   useEffect(() => {
@@ -237,7 +241,7 @@ export default function Posts({
           ) : (
             ''
           )}
-          <ol className='blog-list'>
+          <ol start={page * 10 - 9} className='blog-list'>
             {blogs.map((blog) => {
               return (
                 <li key={blog.id} className='blog'>
