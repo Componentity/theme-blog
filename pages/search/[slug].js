@@ -12,7 +12,15 @@ function Search({ posts, slug, total_pages }) {
 
   return (
     <>
-      <Posts posts={posts} type='search' type_id={slug} totalPages={total_pages} />
+      <Posts
+        posts={posts}
+        title={slug}
+        slug={slug}
+        type='search'
+        type_id={slug}
+        totalPages={total_pages}
+        paginationStyle='pagination'
+      />
     </>
   )
 }
