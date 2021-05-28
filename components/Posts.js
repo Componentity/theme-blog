@@ -179,15 +179,21 @@ export default function Posts({
     let start = page
     let last = totalPages
 
+    // total pages = 1
+    // page = 1
     if (page < totalPages - 5) {
       noAfter = 5
       noBefore = 0
       start = page * 1
       last = start + 5
     } else {
-      noAfter = totalPages - page // 180 - 178 = 2
-      noBefore = 5 - noAfter // 5 - 2 = 3
-      start = page - noBefore // 178 - 3 = 175
+      noAfter = totalPages - page // 180 - 178 = 2 || 1-1=0
+      if (totalPages < 5) {
+        noBefore = 0
+      } else {
+        noBefore = 5 - noAfter
+      }
+      start = page - noBefore
     }
 
     for (let i = start; i <= last; i++) {
@@ -212,7 +218,7 @@ export default function Posts({
     pagesArray.push(
       <li key='last'>
         <button disabled={page == totalPages ? true : false} onClick={() => setPage(totalPages)}>
-          Last
+          Last ({totalPages})
         </button>
       </li>
     )
