@@ -7,7 +7,22 @@ async function getNewPostsFromApi(page, type, type_id) {
   const res = await fetch(
     `https://reporterly.net/wp-json/wp/v2/posts?${type}=${id}&_embed=true&page=${page}`
   )
-  return await res.json()
+  const blogs = await res.json()
+
+  const posts = []
+  for (const post of blogs) {
+    const post_id = post.id
+    // get categories
+    const post_cats = await fetch(`https://reporterly.net/wp-json/wp/v2/categories?post=${post_id}`)
+    const cats = await post_cats.json()
+    // get tags
+    const post_tags = await fetch(`https://reporterly.net/wp-json/wp/v2/tags?post=${post_id}`)
+    const tags = await post_tags.json()
+
+    posts.push({ blog: post, cats, tags })
+  }
+
+  return posts
 }
 
 export default function Posts({
@@ -27,8 +42,10 @@ export default function Posts({
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
+  // posts
+  // [{blog:post, cats, tags}, {blog:post, cats, tags}, {blog:post, cats, tags}, ]
   const [blogs, setBlogs] = useState(posts)
-  //   console.log(posts)
+  // console.log('BLOGS: POSTS.JS', blogs)
 
   const isInitialMount = useRef(true)
 
@@ -47,10 +64,11 @@ export default function Posts({
   }
 
   // trigger loadmore (update page number)
-  function updatePage() {
+  function updatePage(pageNum) {
     // console.log('UPDATING NUMBER...')
     setLoading(true)
-    return setPage(page + 1)
+    setDisable(true)
+    return setPage(pageNum)
   }
 
   // get more posts
@@ -146,7 +164,7 @@ export default function Posts({
 
   function Loadmore() {
     return (
-      <button disabled={disable} onClick={updatePage} type='button'>
+      <button disabled={disable} onClick={() => updatePage(page * 1 + 1)} type='button'>
         {loading ? 'Loading...' : 'Load more'}
       </button>
     )
@@ -160,7 +178,7 @@ export default function Posts({
     // first
     pagesArray.push(
       <li key='first'>
-        <button disabled={page == 1 ? true : false} onClick={() => setPage(1)}>
+        <button disabled={page == 1 ? true : false} onClick={() => updatePage(1)}>
           First
         </button>
       </li>
@@ -168,7 +186,7 @@ export default function Posts({
     // previous
     pagesArray.push(
       <li key='prev'>
-        <button disabled={page == 1 ? true : false} onClick={() => setPage(page - 1)}>
+        <button disabled={page == 1 ? true : false} onClick={() => updatePage(page - 1)}>
           Prev
         </button>
       </li>
@@ -199,7 +217,7 @@ export default function Posts({
     for (let i = start; i <= last; i++) {
       pagesArray.push(
         <li key={i}>
-          <button disabled={page == i ? true : false} onClick={() => setPage(i)}>
+          <button disabled={page == i ? true : false} onClick={() => updatePage(i)}>
             {i}
           </button>
         </li>
@@ -209,7 +227,7 @@ export default function Posts({
     // next
     pagesArray.push(
       <li key='next'>
-        <button disabled={page == totalPages ? true : false} onClick={() => setPage(page + 1)}>
+        <button disabled={page == totalPages ? true : false} onClick={() => updatePage(page + 1)}>
           Next
         </button>
       </li>
@@ -217,7 +235,7 @@ export default function Posts({
     // last
     pagesArray.push(
       <li key='last'>
-        <button disabled={page == totalPages ? true : false} onClick={() => setPage(totalPages)}>
+        <button disabled={page == totalPages ? true : false} onClick={() => updatePage(totalPages)}>
           Last ({totalPages})
         </button>
       </li>
@@ -247,16 +265,49 @@ export default function Posts({
           ) : (
             ''
           )}
-          <ol start={page * 10 - 9} className='blog-list'>
-            {blogs.map((blog) => {
-              return (
-                <li key={blog.id} className='blog'>
-                  <Link href={`/blog/${blog.slug}`}>
-                    <a>{blog.title.rendered}</a>
-                  </Link>
-                </li>
-              )
-            })}
+          <ol start={paginationStyle == 'pagination' ? page * 10 - 9 : 1} className='blog-list'>
+            {loading && paginationStyle == 'pagination' ? (
+              <p>Loding...</p>
+            ) : (
+              blogs.map((blog_pack) => {
+                return (
+                  <li key={blog_pack.blog.id} className='blog'>
+                    <Link href={`/blog/${blog_pack.blog.slug}`}>
+                      <a>
+                        <h6>{blog_pack.blog.title.rendered}</h6>
+                      </a>
+                    </Link>
+                    <p>{blog_pack.blog.excerpt.rendered}</p>
+                    <hr />
+                    <ul>
+                      <li>
+                        <Link
+                          href={`/author/${encodeURIComponent(
+                            blog_pack.blog._embedded.author[0].slug
+                          )}`}
+                        >
+                          <a>Author: {blog_pack.blog._embedded.author[0].name}</a>
+                        </Link>
+                      </li>
+                    </ul>
+                    <hr />
+                    <p>Categories: </p>
+                    <ul>
+                      {blog_pack.cats.map((cat) => {
+                        return (
+                          <li key={cat.id}>
+                            <Link href={`/category/${cat.slug}`}>
+                              <a>{cat.name}</a>
+                            </Link>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                    <hr />
+                  </li>
+                )
+              })
+            )}
           </ol>
           <hr />
           {paginationStyle ? <Pagination type={paginationStyle} /> : ''}

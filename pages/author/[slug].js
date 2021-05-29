@@ -63,16 +63,31 @@ export async function getStaticProps({ params }) {
   const author = await res.json()
 
   // get posts of this author
-  let posts = null
+  let posts = []
   let total_pages = null
   let author_id = null
+
   if (author.length > 0) {
     author_id = author[0].id
     const author_posts = await fetch(
-      `https://reporterly.net/wp-json/wp/v2/posts?author=${author_id}`
+      `https://reporterly.net/wp-json/wp/v2/posts?_embed=true&author=${author_id}`
     )
-    posts = await author_posts.json()
+    const blogs = await author_posts.json()
     total_pages = author_posts.headers.get('X-WP-TotalPages')
+
+    for (const post of blogs) {
+      const post_id = post.id
+      // get categories
+      const post_cats = await fetch(
+        `https://reporterly.net/wp-json/wp/v2/categories?post=${post_id}`
+      )
+      const cats = await post_cats.json()
+      // get tags
+      const post_tags = await fetch(`https://reporterly.net/wp-json/wp/v2/tags?post=${post_id}`)
+      const tags = await post_tags.json()
+
+      posts.push({ blog: post, cats, tags })
+    }
   }
   // Pass post data to the page via props
   return {

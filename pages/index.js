@@ -21,33 +21,65 @@ export default function Blog(postsContainer) {
 }
 
 export async function getStaticProps() {
+  // {
+  //   name: 'CATEGORY TWO',
+  //   slug: 'blog',
+  //   type: 'categories',
+  //   type_id: 19,
+  //   count: 2
+  // },
+  // {
+  //   name: 'AUTHOR',
+  //   slug: 'newsfeed',
+  //   type: 'author',
+  //   type_id: 7,
+  //   count: 2
+  // },
+  // {
+  // count: 2
+  // }
+
   const sections = [
     {
-      name: 'CATEGORY TWO',
-      slug: 'blog',
-      type: 'categories',
-      type_id: 19,
       count: 2
-    },
-    {
-      name: 'AUTHOR',
-      slug: 'newsfeed',
-      type: 'author',
-      type_id: 7,
-      count: 2
-    },
-    { count: 2 }
+    }
   ]
 
   let postsContainer = []
   for (const section of sections) {
-    const args = `${section.type}=${section.type_id}&per_page=${section.count}&_embed=true`
+    let args = `_embed=true&per_page=${section.count}`
+    if (section.type && section.type_id) {
+      args += `&${section.type}=${section.type_id}`
+    }
+    // console.log('ARGS', args)
     const res = await fetch(`https://reporterly.net/wp-json/wp/v2/posts?${args}`)
-    const posts = await res.json()
+    const blogs = await res.json()
+    // console.log('BLOGS INDEXJS', blogs)
+
+    let posts = []
+    for (const post of blogs) {
+      const post_id = post.id
+      // get categories
+      const post_cats = await fetch(
+        `https://reporterly.net/wp-json/wp/v2/categories?post=${post_id}`
+      )
+      const cats = await post_cats.json()
+      // get tags
+      const post_tags = await fetch(`https://reporterly.net/wp-json/wp/v2/tags?post=${post_id}`)
+      const tags = await post_tags.json()
+
+      posts.push({ blog: post, cats, tags })
+    }
+
+    // console.log('BLOGS PASSED TO POSTS.JS: ', posts)
+
+    console.log('SECTOIN', section)
+
     postsContainer.push({
       ...section,
       posts: posts
     })
+    console.log('POSTS CONTAINER', postsContainer)
   }
 
   // console.log('POSTS CONTAINER', ...postsContainer)

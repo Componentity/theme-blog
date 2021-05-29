@@ -47,8 +47,21 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { slug } = params
   const res = await fetch(`https://reporterly.net/wp-json/wp/v2/posts?search=${slug}&_embed=true`)
-  const posts = await res.json()
+  const blogs = await res.json()
   const total_pages = res.headers.get('X-WP-TotalPages')
+
+  const posts = []
+  for (const post of blogs) {
+    const post_id = post.id
+    // get categories
+    const post_cats = await fetch(`https://reporterly.net/wp-json/wp/v2/categories?post=${post_id}`)
+    const cats = await post_cats.json()
+    // get tags
+    const post_tags = await fetch(`https://reporterly.net/wp-json/wp/v2/tags?post=${post_id}`)
+    const tags = await post_tags.json()
+
+    posts.push({ blog: post, cats, tags })
+  }
 
   // Pass post data to the page via props
   return {
