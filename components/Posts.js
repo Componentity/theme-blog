@@ -94,7 +94,7 @@ export default function Posts({
   useEffect(() => {
     console.log('ON ROUTER USE EFFECT')
     setBlogs(posts)
-    setPage(1)
+    updatePage(1)
   }, [router])
 
   // disable loadmore
@@ -129,7 +129,7 @@ export default function Posts({
           // Detects when user scrolls down till the last blog
           if (pageOffset > lastBlogLoadedOffset) {
             // fetch new posts
-            updatePage()
+            updatePage(page * 1 + 1)
           }
         }
       }
