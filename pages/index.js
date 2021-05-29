@@ -73,13 +73,13 @@ export async function getStaticProps() {
 
     // console.log('BLOGS PASSED TO POSTS.JS: ', posts)
 
-    console.log('SECTOIN', section)
+    // console.log('SECTOIN', section)
 
     postsContainer.push({
       ...section,
       posts: posts
     })
-    console.log('POSTS CONTAINER', postsContainer)
+    // console.log('POSTS CONTAINER', postsContainer)
   }
 
   // console.log('POSTS CONTAINER', ...postsContainer)

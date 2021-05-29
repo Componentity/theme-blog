@@ -1,5 +1,4 @@
 import Search from './Search'
-// search name changed to upper case
 
 export default function Layout({ children }) {
   return (
