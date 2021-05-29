@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-function Search() {
+function SearchForm() {
   const router = useRouter()
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
@@ -52,4 +52,4 @@ function Search() {
   )
 }
 
-export default Search
+export default SearchForm
