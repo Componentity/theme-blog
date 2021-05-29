@@ -1,4 +1,4 @@
-import Search from './Search'
+import Search from './SearchForm'
 
 export default function Layout({ children }) {
   return (
