@@ -2,8 +2,10 @@ import SearchForm from './SearchForm'
 
 export default function Layout({ children }) {
   return (
-    <div className='container-fluid p-0 m-0'>
+    <div className='max-w-screen-md mx-auto'>
       <SearchForm />
+      <br />
+      <br />
       {children}
     </div>
   )
