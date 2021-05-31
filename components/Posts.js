@@ -3,9 +3,8 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 async function getNewPostsFromApi(page, type, type_id) {
-  const id = type_id
   const res = await fetch(
-    `https://reporterly.net/wp-json/wp/v2/posts?${type}=${id}&_embed=true&page=${page}`
+    `https://reporterly.net/wp-json/wp/v2/posts?_embed=true&${type}=${type_id}&page=${page}`
   )
   const blogs = await res.json()
 
@@ -65,10 +64,10 @@ export default function Posts({
 
   // trigger loadmore (update page number)
   function updatePage(pageNum) {
-    // console.log('UPDATING NUMBER...')
-    setLoading(true)
-    setDisable(true)
-    return setPage(pageNum)
+    console.log('UPDATING PAGE NUMBER...')
+    setPage(pageNum)
+    console.log('PAGE UPDATEPAGE: ', page)
+    return null
   }
 
   // get more posts
@@ -77,6 +76,8 @@ export default function Posts({
       isInitialMount.current = false
       console.log('CURRENT')
     } else {
+      console.log('ON PAGE UPDATE SET LOADING TRUE')
+      setLoading(true)
       const newPosts = await getNewPostsFromApi(page, type, type_id)
       if (newPosts.length > 0) {
         if (paginationStyle == 'pagination') {
@@ -84,27 +85,38 @@ export default function Posts({
         } else {
           setBlogs([...blogs, ...newPosts])
         }
-      } else {
-        setDisable(true)
       }
-      setLoading(false)
     }
   }, [page])
 
   useEffect(() => {
     console.log('ON ROUTER USE EFFECT')
+    console.log('PAGE', page)
     setBlogs(posts)
-    updatePage(1)
   }, [router])
 
   // disable loadmore
   useEffect(() => {
+    console.log('ON EACH PAGE UPDATE IF PAGE === LAST PAGE SET DISABLE TRUE')
     if (page >= totalPages) {
       setDisable(true)
     }
     // console.log('Total', totalPages)
     // console.log('Current Page', page)
   }, [page])
+
+  useEffect(() => {
+    console.log('ON EACH BLOGS UPDATE SET LOADING FALSE: ')
+    setLoading(false)
+  }, [blogs])
+
+  useEffect(() => {
+    console.log('LOADING: ', loading)
+  }, [loading])
+
+  useEffect(() => {
+    console.log('DISABLE: ', disable)
+  }, [disable])
 
   // ========================================================
   // INFINITE SCROLLING
@@ -265,50 +277,51 @@ export default function Posts({
           ) : (
             ''
           )}
-          <ol start={paginationStyle == 'pagination' ? page * 10 - 9 : 1} className='blog-list'>
-            {loading && paginationStyle == 'pagination' ? (
-              <p>Loding...</p>
-            ) : (
-              blogs.map((blog_pack) => {
-                return (
-                  <li key={blog_pack.blog.id} className='blog'>
-                    <Link href={`/blog/${blog_pack.blog.slug}`}>
-                      <a>
-                        <h6>{blog_pack.blog.title.rendered}</h6>
-                      </a>
-                    </Link>
-                    <p>{blog_pack.blog.excerpt.rendered}</p>
-                    <hr />
-                    <ul>
-                      <li>
-                        <Link
-                          href={`/author/${encodeURIComponent(
-                            blog_pack.blog._embedded.author[0].slug
-                          )}`}
-                        >
-                          <a>Author: {blog_pack.blog._embedded.author[0].name}</a>
-                        </Link>
-                      </li>
-                    </ul>
-                    <hr />
-                    <p>Categories: </p>
-                    <ul>
-                      {blog_pack.cats.map((cat) => {
-                        return (
-                          <li key={cat.id}>
-                            <Link href={`/category/${cat.slug}`}>
-                              <a>{cat.name}</a>
-                            </Link>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                    <hr />
-                  </li>
-                )
-              })
-            )}
-          </ol>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <ol start={paginationStyle == 'pagination' ? page * 10 - 9 : 1} className='blog-list'>
+              {blogs &&
+                blogs.map((blog_pack) => {
+                  return (
+                    <li key={blog_pack.blog.id} className='blog'>
+                      <Link href={`/blog/${blog_pack.blog.slug}`}>
+                        <a>
+                          <h6>{blog_pack.blog.title.rendered}</h6>
+                        </a>
+                      </Link>
+                      <p>{blog_pack.blog.excerpt.rendered}</p>
+                      <hr />
+                      <ul>
+                        <li>
+                          <Link
+                            href={`/author/${encodeURIComponent(
+                              blog_pack.blog._embedded.author[0].slug
+                            )}`}
+                          >
+                            <a>Author: {blog_pack.blog._embedded.author[0].name}</a>
+                          </Link>
+                        </li>
+                      </ul>
+                      <hr />
+                      <p>Categories: </p>
+                      <ul>
+                        {blog_pack.cats.map((cat) => {
+                          return (
+                            <li key={cat.id}>
+                              <Link href={`/category/${cat.slug}`}>
+                                <a>{cat.name}</a>
+                              </Link>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                      <hr />
+                    </li>
+                  )
+                })}
+            </ol>
+          )}
           <hr />
           {paginationStyle ? <Pagination type={paginationStyle} /> : ''}
           <hr />
