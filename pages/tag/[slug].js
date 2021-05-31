@@ -16,8 +16,8 @@ function Tag({ tags, posts, tag_id, total_pages }) {
         <h1>My Custom 404 Page</h1>
       ) : (
         <div>
-          <h1>{tags[0].name}</h1>
-          <hr />
+          <h1 className='text-xl font-bold uppercase text-center mb-2'>{tags[0].name}</h1>
+          <hr className='mb-2 w-32 mx-auto' />
           <article dangerouslySetInnerHTML={{ __html: tags[0].description }} />
           <hr />
           <Posts

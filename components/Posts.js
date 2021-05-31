@@ -36,7 +36,7 @@ export default function Posts({
 }) {
   const router = useRouter()
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <p className='text-center'>Loading...</p>
   }
 
   const [page, setPage] = useState(1)
@@ -168,7 +168,7 @@ export default function Posts({
   // INFINITE LOADING COMPONENT
   // ===================================
   function InfiniteLoader() {
-    return loading ? <p>Loading...</p> : ''
+    return loading ? <p className='text-center'>Loading</p> : ''
   }
 
   // ===================================
@@ -177,7 +177,12 @@ export default function Posts({
 
   function Loadmore() {
     return (
-      <button disabled={disable} onClick={() => updatePage(page * 1 + 1)} type='button'>
+      <button
+        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50'
+        disabled={disable}
+        onClick={() => updatePage(page * 1 + 1)}
+        type='button'
+      >
         {loading ? 'Loading...' : 'Load more'}
       </button>
     )
@@ -191,7 +196,11 @@ export default function Posts({
     // first
     pagesArray.push(
       <li key='first'>
-        <button disabled={page == 1 ? true : false} onClick={() => updatePage(1)}>
+        <button
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+          disabled={page == 1 ? true : false}
+          onClick={() => updatePage(1)}
+        >
           First
         </button>
       </li>
@@ -199,7 +208,11 @@ export default function Posts({
     // previous
     pagesArray.push(
       <li key='prev'>
-        <button disabled={page == 1 ? true : false} onClick={() => updatePage(page - 1)}>
+        <button
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+          disabled={page == 1 ? true : false}
+          onClick={() => updatePage(page - 1)}
+        >
           Prev
         </button>
       </li>
@@ -230,7 +243,11 @@ export default function Posts({
     for (let i = start; i <= last; i++) {
       pagesArray.push(
         <li key={i}>
-          <button disabled={page == i ? true : false} onClick={() => updatePage(i)}>
+          <button
+            className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+            disabled={page == i ? true : false}
+            onClick={() => updatePage(i)}
+          >
             {i}
           </button>
         </li>
@@ -240,7 +257,11 @@ export default function Posts({
     // next
     pagesArray.push(
       <li key='next'>
-        <button disabled={page == totalPages ? true : false} onClick={() => updatePage(page + 1)}>
+        <button
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+          disabled={page == totalPages ? true : false}
+          onClick={() => updatePage(page + 1)}
+        >
           Next
         </button>
       </li>
@@ -248,14 +269,18 @@ export default function Posts({
     // last
     pagesArray.push(
       <li key='last'>
-        <button disabled={page == totalPages ? true : false} onClick={() => updatePage(totalPages)}>
+        <button
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+          disabled={page == totalPages ? true : false}
+          onClick={() => updatePage(totalPages)}
+        >
           Last ({totalPages})
         </button>
       </li>
     )
 
     return (
-      <ul>
+      <ul className='inline-flex text-center'>
         {pagesArray.map((page) => {
           return page
         })}
@@ -270,18 +295,21 @@ export default function Posts({
       ) : (
         <div>
           {title && slug ? (
-            <Link href={`/${type_url}/${slug}`}>
-              <a>
-                <h1>{title}</h1>
-              </a>
-            </Link>
+            <>
+              <Link href={`/${type_url}/${slug}`}>
+                <a>
+                  <h1 className='text-xl font-bold uppercase text-center mb-2'>{title}</h1>
+                </a>
+              </Link>
+              <hr className='mb-2 w-32 mx-auto' />
+            </>
           ) : (
             ''
           )}
           {loading && paginationStyle == 'pagination' ? (
-            <p>Loading...</p>
+            <p className='text-center'>Loading</p>
           ) : (
-            <ol start={paginationStyle == 'pagination' ? page * 10 - 9 : 1} className='blog-list'>
+            <ol className='blog-list'>
               {blogs &&
                 blogs.map((blog_pack) => {
                   return (
@@ -294,16 +322,19 @@ export default function Posts({
                         </Link>
                         <div className='relative'>
                           <Link href={`/blog/${blog_pack.blog.slug}`}>
-                            {blog_pack.blog.featured_media != 0 && blog_pack.blog.featured_media ? (
-                              <Image
-                                height={400}
-                                width={768}
-                                src={blog_pack.blog._embedded['wp:featuredmedia'][0].source_url}
-                                alt=''
-                              />
-                            ) : (
-                              <div className='h-400 w-full bg-gray-100'></div>
-                            )}
+                            <a>
+                              {blog_pack.blog.featured_media != 0 &&
+                              blog_pack.blog.featured_media ? (
+                                <Image
+                                  height={400}
+                                  width={768}
+                                  src={blog_pack.blog._embedded['wp:featuredmedia'][0].source_url}
+                                  alt=''
+                                />
+                              ) : (
+                                <div className='h-400 w-full bg-gray-100'></div>
+                              )}
+                            </a>
                           </Link>
                           <Link
                             href={`/author/${encodeURIComponent(
@@ -311,7 +342,21 @@ export default function Posts({
                             )}`}
                           >
                             <a className='hidden absolute z-10 text-xs absolute bottom-0 left-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex items-center'>
-                              <span className='text-lg'>|</span>&nbsp;&nbsp;
+                              <svg
+                                fill='currentColor'
+                                height='16px'
+                                aria-hidden='true'
+                                role='img'
+                                focusable='false'
+                                viewBox='0 0 24 24'
+                              >
+                                <path
+                                  fill='currentColor'
+                                  d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'
+                                ></path>
+                                <path d='M0 0h24v24H0z' fill='none'></path>
+                              </svg>
+                              &nbsp;&nbsp;
                               <span>{blog_pack.blog._embedded.author[0].name}</span>
                             </a>
                           </Link>
@@ -351,7 +396,7 @@ export default function Posts({
                             </svg>
                             <span className='ml-1'>{blog_pack.blog.date}</span>
                           </span>
-                          <a href='#' className='flex flex-row items-center hover:text-indigo-600'>
+                          <a className='flex flex-row items-center hover:text-indigo-600'>
                             <svg
                               className='text-indigo-600'
                               fill='currentColor'
@@ -389,8 +434,9 @@ export default function Posts({
                 })}
             </ol>
           )}
-          <hr />
-          {paginationStyle ? <Pagination type={paginationStyle} /> : ''}
+          <div className='text-center'>
+            {paginationStyle ? <Pagination type={paginationStyle} /> : ''}
+          </div>
           <hr />
         </div>
       )}

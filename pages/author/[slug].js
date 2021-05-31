@@ -16,8 +16,8 @@ function Author({ author, posts, author_id, total_pages }) {
         <h1>My Custom 404 Page</h1>
       ) : (
         <div>
-          <h1>{author[0].name}</h1>
-          <hr />
+          <h1 className='text-xl font-bold uppercase text-center mb-2'>{author[0].name}</h1>
+          <hr className='mb-2 w-32 mx-auto' />
           <article dangerouslySetInnerHTML={{ __html: author[0].description.rendered }} />
           <hr />
           <Posts
