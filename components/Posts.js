@@ -277,7 +277,7 @@ export default function Posts({
           ) : (
             ''
           )}
-          {loading ? (
+          {loading && paginationStyle == 'pagination' ? (
             <p>Loading...</p>
           ) : (
             <ol start={paginationStyle == 'pagination' ? page * 10 - 9 : 1} className='blog-list'>
