@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Image from 'next/image'
 
 async function getNewPostsFromApi(page, type, type_id) {
   const res = await fetch(
