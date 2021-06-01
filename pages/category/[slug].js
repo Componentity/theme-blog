@@ -16,10 +16,10 @@ function Category({ categories, posts, category_id, total_pages }) {
         <h1>My Custom 404 Page</h1>
       ) : (
         <div>
-          <h1 className='text-xl font-bold uppercase text-center mb-2'>{categories[0].name}</h1>
-          <hr className='mb-2 w-32 mx-auto' />
+          <h1 className='text-xl font-bold uppercase mb-2'>{categories[0].name}</h1>
+          <hr className='mb-2 h-2 w-40' />
           <article dangerouslySetInnerHTML={{ __html: categories[0].description }} />
-          <hr />
+          <hr className='my-4' />
           <Posts
             posts={posts}
             type='categories'

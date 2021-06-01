@@ -168,7 +168,7 @@ export default function Posts({
   // INFINITE LOADING COMPONENT
   // ===================================
   function InfiniteLoader() {
-    return loading ? <p className='text-center'>Loading</p> : ''
+    return loading ? <p className='text-center'>Loading...</p> : ''
   }
 
   // ===================================
@@ -178,7 +178,7 @@ export default function Posts({
   function Loadmore() {
     return (
       <button
-        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50'
+        className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded disabled:bg-gray-100 disabled:cursor-not-allowed'
         disabled={disable}
         onClick={() => updatePage(page * 1 + 1)}
         type='button'
@@ -197,7 +197,7 @@ export default function Posts({
     pagesArray.push(
       <li key='first'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={page == 1 ? true : false}
           onClick={() => updatePage(1)}
         >
@@ -209,7 +209,7 @@ export default function Posts({
     pagesArray.push(
       <li key='prev'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={page == 1 ? true : false}
           onClick={() => updatePage(page - 1)}
         >
@@ -244,7 +244,7 @@ export default function Posts({
       pagesArray.push(
         <li key={i}>
           <button
-            className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+            className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
             disabled={page == i ? true : false}
             onClick={() => updatePage(i)}
           >
@@ -258,7 +258,7 @@ export default function Posts({
     pagesArray.push(
       <li key='next'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={page == totalPages ? true : false}
           onClick={() => updatePage(page + 1)}
         >
@@ -270,7 +270,7 @@ export default function Posts({
     pagesArray.push(
       <li key='last'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50'
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={page == totalPages ? true : false}
           onClick={() => updatePage(totalPages)}
         >
@@ -280,7 +280,7 @@ export default function Posts({
     )
 
     return (
-      <ul className='inline-flex text-center'>
+      <ul className='inline-flex text-center gap-2'>
         {pagesArray.map((page) => {
           return page
         })}
@@ -298,10 +298,10 @@ export default function Posts({
             <>
               <Link href={`/${type_url}/${slug}`}>
                 <a>
-                  <h1 className='text-xl font-bold uppercase text-center mb-2'>{title}</h1>
+                  <h1 className='text-xl font-bold uppercase mb-2'>{title}</h1>
                 </a>
               </Link>
-              <hr className='mb-2 w-32 mx-auto' />
+              <hr className='mb-2 h-2 w-40' />
             </>
           ) : (
             ''
@@ -418,11 +418,11 @@ export default function Posts({
                             </svg>
                             {blog_pack.cats.map((cat) => {
                               return (
-                                <span className='ml-1' key={cat.id}>
+                                <div className='ml-1' key={cat.id}>
                                   <Link href={`/category/${cat.slug}`}>
                                     <a>{cat.name}</a>
                                   </Link>
-                                </span>
+                                </div>
                               )
                             })}
                           </a>
@@ -437,7 +437,6 @@ export default function Posts({
           <div className='text-center'>
             {paginationStyle ? <Pagination type={paginationStyle} /> : ''}
           </div>
-          <hr />
         </div>
       )}
     </>

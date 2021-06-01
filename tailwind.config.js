@@ -5,7 +5,8 @@ module.exports = {
     extend: {}
   },
   variants: {
-    extend: {}
+    backgroundColor: ({ after }) => after(['disabled']),
+    cursor: ({ after }) => after(['disabled'])
   },
   plugins: []
 }

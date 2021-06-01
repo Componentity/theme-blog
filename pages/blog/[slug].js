@@ -98,16 +98,15 @@ function Post({ post, cats, tags }) {
               })}
             </a>
           </div>
-          {post[0].featured_media != 0 && post[0].featured_media ? (
-            <Image
-              height={400}
-              width={768}
-              src={post[0]._embedded['wp:featuredmedia'][0].source_url}
-              alt=''
-            />
-          ) : (
-            <div className='h-400 w-full bg-gray-100'></div>
-          )}
+          {post[0].featured_media != 0 &&
+            post[0].featured_media(
+              <Image
+                height={400}
+                width={768}
+                src={post[0]._embedded['wp:featuredmedia'][0].source_url}
+                alt=''
+              />
+            )}
           <div
             className='text-gray-700 py-5 text-base leading-8'
             dangerouslySetInnerHTML={{ __html: post[0].content.rendered }}
