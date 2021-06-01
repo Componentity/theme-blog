@@ -307,7 +307,7 @@ export default function Posts({
             ''
           )}
           {loading && paginationStyle == 'pagination' ? (
-            <p className='text-center'>Loading</p>
+            <p className='text-center'>Loading...</p>
           ) : (
             <ol className='blog-list'>
               {blogs &&
