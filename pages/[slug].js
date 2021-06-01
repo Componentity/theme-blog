@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
+import ResponsiveArticle from './../components/skeleton/ResponsiveArticle'
 
 function Page({ page }) {
   const router = useRouter()
