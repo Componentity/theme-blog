@@ -8,7 +8,7 @@ function Navigation({ router }) {
     { text: 'Latest Stories', href: '/category/latest-stories' }
   ]
   return (
-    <header className='flex sm:flex-row justify-between'>
+    <header className='flex sm:flex-row justify-between mb-4'>
       <div className='site'>
         <h1 aria-label='site-name'>WPTHEME</h1>
         <p aria-label='site-description' className='description'>
@@ -21,7 +21,7 @@ function Navigation({ router }) {
             <li key={index}>
               <Link href={nav.href}>
                 <a
-                  className={`py-2 px-5 rounded-mdtext-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                  className={`py-2 px-5 rounded-mdtext-sm font-light hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:text-gray-300 ${
                     router.pathname == nav.href
                       ? 'bg-indigo-600 text-gray-50 hover:text-gray-700'
                       : 'text-gray-700'
