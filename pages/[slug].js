@@ -23,7 +23,7 @@ function Page({ page }) {
               height={400}
               width={900}
               src={page[0]._embedded['wp:featuredmedia'][0].source_url}
-              alt=''
+              alt={page[0].title.rendered}
             />
           ) : (
             ''

@@ -335,7 +335,7 @@ export default function Posts({
                                   height={400}
                                   width={768}
                                   src={blog_pack.blog._embedded['wp:featuredmedia'][0].source_url}
-                                  alt=''
+                                  alt={blog_pack.blog.title.rendered}
                                 />
                               ) : (
                                 <div className='h-400 w-full bg-gray-100'></div>

@@ -104,7 +104,7 @@ function Post({ post, cats, tags }) {
               height={400}
               width={768}
               src={post[0]._embedded['wp:featuredmedia'][0].source_url}
-              alt=''
+              alt={post[0].title.rendered}
             />
           ) : (
             ''
