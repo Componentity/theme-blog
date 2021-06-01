@@ -6,6 +6,7 @@ import ResponsiveArticle from './skeleton/ResponsiveArticle'
 import SVGCategory from './SVG/SVGCategory'
 import SVGAuthor from './SVG/SVGAuthor'
 import SVGClock from './SVG/SVGClock'
+import SVGReload from './SVG/SVGReload'
 
 async function getNewPostsFromApi(page, type, type_id) {
   const res = await fetch(
@@ -176,11 +177,12 @@ export default function Posts({
       <>
         {loading ? <ResponsiveArticle /> : ''}
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded disabled:bg-gray-100 disabled:cursor-not-allowed'
+          className='flex flex-row gap-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={disable}
           onClick={() => updatePage(page * 1 + 1)}
           type='button'
         >
+          <SVGReload />
           {loading ? 'Loading...' : 'Load more'}
         </button>
       </>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import SwitchTheme from './SwitchTheme'
 
 function SearchForm() {
   const router = useRouter()
@@ -58,7 +57,6 @@ function SearchForm() {
       >
         {loading ? 'loading...' : 'Submit'}
       </button>
-      <SwitchTheme />
     </form>
   )
 }
