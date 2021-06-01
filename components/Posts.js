@@ -319,9 +319,11 @@ export default function Posts({
                         <Link href={`/blog/${blog_pack.blog.slug}`}>
                           <a
                             aria-label='Blog post'
-                            className='text-xl sm:text-4xl font-semibold inline-block dark:text-gray-50 dark:hover:text-indigo-600 hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2'
+                            className='dark:text-gray-50 dark:hover:text-indigo-600 hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2'
                           >
-                            {blog_pack.blog.title.rendered}
+                            <h1 className='text-xl sm:text-4xl font-semibold'>
+                              {blog_pack.blog.title.rendered}
+                            </h1>
                           </a>
                         </Link>
                         <div className='relative'>
