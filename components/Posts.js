@@ -201,7 +201,7 @@ export default function Posts({
     pagesArray.push(
       <li key='first'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+          className='border hidden sm:inline-block bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={page == 1 ? true : false}
           onClick={() => updatePage(1)}
         >
@@ -213,7 +213,7 @@ export default function Posts({
     pagesArray.push(
       <li key='prev'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+          className='border bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={page == 1 ? true : false}
           onClick={() => updatePage(page - 1)}
         >
@@ -248,7 +248,9 @@ export default function Posts({
       pagesArray.push(
         <li key={i}>
           <button
-            className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+            className={`${
+              page == i ? '' : 'hidden'
+            } border sm:inline-block bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed`}
             disabled={page == i ? true : false}
             onClick={() => updatePage(i)}
           >
@@ -262,7 +264,7 @@ export default function Posts({
     pagesArray.push(
       <li key='next'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+          className='border bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={page == totalPages ? true : false}
           onClick={() => updatePage(page + 1)}
         >
@@ -274,7 +276,7 @@ export default function Posts({
     pagesArray.push(
       <li key='last'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+          className='border hidden sm:inline-block bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
           disabled={page == totalPages ? true : false}
           onClick={() => updatePage(totalPages)}
         >
@@ -284,7 +286,7 @@ export default function Posts({
     )
 
     return (
-      <ul className='inline-flex text-center gap-2'>
+      <ul className='inline-flex text-center'>
         {pagesArray.map((page) => {
           return page
         })}
