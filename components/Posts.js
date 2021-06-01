@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
+import ResponsiveArticle from './skeleton/ResponsiveArticle'
 
 async function getNewPostsFromApi(page, type, type_id) {
   const res = await fetch(
@@ -36,7 +37,7 @@ export default function Posts({
 }) {
   const router = useRouter()
   if (router.isFallback) {
-    return <p className='text-center'>Loading...</p>
+    return <ResponsiveArticle />
   }
 
   const [page, setPage] = useState(1)
@@ -168,7 +169,7 @@ export default function Posts({
   // INFINITE LOADING COMPONENT
   // ===================================
   function InfiniteLoader() {
-    return loading ? <p className='text-center'>Loading...</p> : ''
+    return loading ? <ResponsiveArticle /> : ''
   }
 
   // ===================================
@@ -177,14 +178,17 @@ export default function Posts({
 
   function Loadmore() {
     return (
-      <button
-        className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded disabled:bg-gray-100 disabled:cursor-not-allowed'
-        disabled={disable}
-        onClick={() => updatePage(page * 1 + 1)}
-        type='button'
-      >
-        {loading ? 'Loading...' : 'Load more'}
-      </button>
+      <>
+        {loading ? <ResponsiveArticle /> : ''}
+        <button
+          className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded disabled:bg-gray-100 disabled:cursor-not-allowed'
+          disabled={disable}
+          onClick={() => updatePage(page * 1 + 1)}
+          type='button'
+        >
+          {loading ? 'Loading...' : 'Load more'}
+        </button>
+      </>
     )
   }
 
@@ -307,7 +311,7 @@ export default function Posts({
             ''
           )}
           {loading && paginationStyle == 'pagination' ? (
-            <p className='text-center'>Loading...</p>
+            <ResponsiveArticle />
           ) : (
             <ol className='blog-list'>
               {blogs &&
@@ -396,7 +400,7 @@ export default function Posts({
                             </svg>
                             <span className='ml-1'>{blog_pack.blog.date}</span>
                           </span>
-                          <a className='flex flex-row items-center hover:text-indigo-600'>
+                          <span className='flex flex-row items-center hover:text-indigo-600'>
                             <svg
                               className='text-indigo-600'
                               fill='currentColor'
@@ -425,7 +429,7 @@ export default function Posts({
                                 </div>
                               )
                             })}
-                          </a>
+                          </span>
                         </div>
                         <hr />
                       </div>

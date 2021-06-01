@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import Posts from './../../components/Posts'
+import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
 
 function Search({ posts, slug, total_pages }) {
   const router = useRouter()
@@ -7,7 +8,7 @@ function Search({ posts, slug, total_pages }) {
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <ResponsiveArticle />
   }
 
   return (

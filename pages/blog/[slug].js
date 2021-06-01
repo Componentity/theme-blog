@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
+import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
 
 function Post({ post, cats, tags }) {
   const router = useRouter()
@@ -8,7 +9,7 @@ function Post({ post, cats, tags }) {
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <ResponsiveArticle />
   }
 
   return (
@@ -113,7 +114,7 @@ function Post({ post, cats, tags }) {
             dangerouslySetInnerHTML={{ __html: post[0].content.rendered }}
           />
           <hr />
-          <a className='flex flex-row items-center hover:text-indigo-600'>
+          <span className='flex flex-row items-center hover:text-indigo-600'>
             <svg
               className='text-indigo-600'
               fill='currentColor'
@@ -142,7 +143,7 @@ function Post({ post, cats, tags }) {
                 </span>
               )
             })}
-          </a>
+          </span>
         </div>
       )}
     </>

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import Link from 'next/link'
+import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
 
 function Page({ page }) {
   const router = useRouter()
@@ -7,7 +7,7 @@ function Page({ page }) {
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <ResponsiveArticle />
   }
 
   return (
@@ -26,7 +26,7 @@ function Page({ page }) {
               alt=''
             />
           ) : (
-            <p>No Image</p>
+            ''
           )}
           <article dangerouslySetInnerHTML={{ __html: page[0].content.rendered }} />
         </div>
