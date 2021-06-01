@@ -21,37 +21,39 @@ function Post({ post, cats, tags }) {
         <h1>Not found</h1>
       ) : (
         <div className='mb-10 rounded overflow-hidden flex flex-col mx-auto'>
-          <h1 className='text-4xl font-bold mb-4 dark:text-gray-50'>{post[0].title.rendered}</h1>
-          <hr />
-          <div className='py-5 text-sm font-regular text-gray-900 flex'>
-            <Link href={`/author/${encodeURIComponent(post[0]._embedded.author[0].slug)}`}>
-              <a
-                aria-label='Author'
-                className='mr-3 flex flex-row gap-1 items-center hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-600'
-              >
-                <SVGAuthor color='indigo-600' />
-                <span>{post[0]._embedded.author[0].name}</span>
-              </a>
-            </Link>
-            <span className='mr-3 flex flex-row items-center dark:text-gray-300'>
-              <SVGClock />
-              <span className='ml-1'>{post[0].date}</span>
-            </span>
-            {cats.length > 0 && (
-              <span className='flex flex-row items-center hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-600'>
-                <SVGCategory />
-                {cats.map((cat) => {
-                  return (
-                    <span className='ml-1' key={cat.id}>
-                      <Link href={`/category/${cat.slug}`}>
-                        <a aria-label='Category'>{cat.name}</a>
-                      </Link>
-                    </span>
-                  )
-                })}
+          <header>
+            <h1 className='text-4xl font-bold mb-4 dark:text-gray-50'>{post[0].title.rendered}</h1>
+            <hr />
+            <div className='py-5 text-sm font-regular text-gray-900 flex'>
+              <Link href={`/author/${encodeURIComponent(post[0]._embedded.author[0].slug)}`}>
+                <a
+                  aria-label='Author'
+                  className='mr-3 flex flex-row gap-1 items-center hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-600'
+                >
+                  <SVGAuthor color='indigo-600' />
+                  <span>{post[0]._embedded.author[0].name}</span>
+                </a>
+              </Link>
+              <span className='mr-3 flex flex-row items-center dark:text-gray-300'>
+                <SVGClock />
+                <span className='ml-1'>{post[0].date}</span>
               </span>
-            )}
-          </div>
+              {cats.length > 0 && (
+                <span className='flex flex-row items-center hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-600'>
+                  <SVGCategory />
+                  {cats.map((cat) => {
+                    return (
+                      <span className='ml-1' key={cat.id}>
+                        <Link href={`/category/${cat.slug}`}>
+                          <a aria-label='Category'>{cat.name}</a>
+                        </Link>
+                      </span>
+                    )
+                  })}
+                </span>
+              )}
+            </div>
+          </header>
           {post[0].featured_media != 0 && post[0].featured_media ? (
             <Image
               height={400}
