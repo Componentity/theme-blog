@@ -25,7 +25,10 @@ function Post({ post, cats, tags }) {
           <hr />
           <div className='py-5 text-sm font-regular text-gray-900 flex'>
             <Link href={`/author/${encodeURIComponent(post[0]._embedded.author[0].slug)}`}>
-              <a className='mr-3 flex flex-row gap-1 items-center hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-600'>
+              <a
+                aria-label='Author'
+                className='mr-3 flex flex-row gap-1 items-center hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-600'
+              >
                 <SVGAuthor color='indigo-600' />
                 <span>{post[0]._embedded.author[0].name}</span>
               </a>
@@ -41,7 +44,7 @@ function Post({ post, cats, tags }) {
                   return (
                     <span className='ml-1' key={cat.id}>
                       <Link href={`/category/${cat.slug}`}>
-                        <a>{cat.name}</a>
+                        <a aria-label='Category'>{cat.name}</a>
                       </Link>
                     </span>
                   )
@@ -72,7 +75,7 @@ function Post({ post, cats, tags }) {
                 return (
                   <span className='ml-1' key={tag.id}>
                     <Link href={`/tag/${tag.slug}`}>
-                      <a>{tag.name}</a>
+                      <a aria-label='Tag'>{tag.name}</a>
                     </Link>
                   </span>
                 )

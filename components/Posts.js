@@ -298,7 +298,7 @@ export default function Posts({
           {title && slug ? (
             <>
               <Link href={`/${type_url}/${slug}`}>
-                <a>
+                <a aria-label='title'>
                   <h1 className='text-xl font-bold uppercase mb-2'>{title}</h1>
                 </a>
               </Link>
@@ -317,13 +317,16 @@ export default function Posts({
                     <li key={blog_pack.blog.id}>
                       <div className='mb-10 rounded overflow-hidden flex flex-col mx-auto'>
                         <Link href={`/blog/${blog_pack.blog.slug}`}>
-                          <a className='text-xl sm:text-4xl font-semibold inline-block dark:text-gray-50 dark:hover:text-indigo-600 hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2'>
+                          <a
+                            aria-label='Blog post'
+                            className='text-xl sm:text-4xl font-semibold inline-block dark:text-gray-50 dark:hover:text-indigo-600 hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2'
+                          >
                             {blog_pack.blog.title.rendered}
                           </a>
                         </Link>
                         <div className='relative'>
                           <Link href={`/blog/${blog_pack.blog.slug}`}>
-                            <a>
+                            <a aria-label='Blog post'>
                               {blog_pack.blog.featured_media != 0 &&
                               blog_pack.blog.featured_media ? (
                                 <Image
@@ -343,13 +346,19 @@ export default function Posts({
                               blog_pack.blog._embedded.author[0].slug
                             )}`}
                           >
-                            <a className='group hidden absolute z-10 text-xs absolute bottom-0 left-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex flex-row gap-1 items-center'>
+                            <a
+                              aria-label='Author'
+                              className='group hidden absolute z-10 text-xs absolute bottom-0 left-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex flex-row gap-1 items-center'
+                            >
                               <SVGAuthor />
                               <span>{blog_pack.blog._embedded.author[0].name}</span>
                             </a>
                           </Link>
                           <Link href={`/blog/${blog_pack.blog.slug}`}>
-                            <a className='hidden absolute z-10 text-xs absolute bottom-0 right-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex items-center'>
+                            <a
+                              aria-label='Blog post'
+                              className='hidden absolute z-10 text-xs absolute bottom-0 right-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex items-center'
+                            >
                               <span className='text-lg'>|</span>&nbsp;&nbsp;<span>Read more</span>
                             </a>
                           </Link>
@@ -369,7 +378,7 @@ export default function Posts({
                               return (
                                 <div className='ml-1' key={cat.id}>
                                   <Link href={`/category/${cat.slug}`}>
-                                    <a>{cat.name}</a>
+                                    <a aria-label='Category'>{cat.name}</a>
                                   </Link>
                                 </div>
                               )
