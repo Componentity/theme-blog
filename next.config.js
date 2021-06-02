@@ -6,5 +6,8 @@ module.exports = withPWA({
   },
   images: {
     domains: ['reporterly.net']
+  },
+  future: {
+    webpack5: true
   }
 })
