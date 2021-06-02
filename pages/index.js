@@ -41,7 +41,7 @@ export async function getStaticProps() {
 
   const sections = [
     {
-      count: 2
+      count: 5
     }
   ]
 
