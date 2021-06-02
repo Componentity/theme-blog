@@ -10,9 +10,7 @@ function Header({ router }) {
   const navs = [
     { text: 'Home', href: '/' },
     { text: 'About Us', href: '/about-us' },
-    { text: 'Latest Stories', href: '/category/latest-stories' },
-    { text: 'Beyond Afghanistan', href: '/category/beyond-afghanistan' },
-    { text: 'Watch', href: '/category/watch' }
+    { text: 'Contact Us', href: '/contact-us' }
   ]
 
   const [display, setDisplay] = useState(false)

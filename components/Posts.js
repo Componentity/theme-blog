@@ -335,7 +335,7 @@ export default function Posts({
                               blog_pack.blog.featured_media ? (
                                 <Image
                                   height={400}
-                                  width={768}
+                                  width={668}
                                   layout='responsive'
                                   src={blog_pack.blog._embedded['wp:featuredmedia'][0].source_url}
                                   alt={blog_pack.blog.title.rendered}
