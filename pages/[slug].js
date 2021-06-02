@@ -23,7 +23,9 @@ function Page({ page }) {
           {page[0].featured_media && page[0].featured_media !== 0 ? (
             <Image
               height={400}
-              width={900}
+              width={668}
+              priority='true'
+              layout='responsive'
               src={page[0]._embedded['wp:featuredmedia'][0].source_url}
               alt={page[0].title.rendered}
             />
