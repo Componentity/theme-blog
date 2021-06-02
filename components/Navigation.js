@@ -15,7 +15,7 @@ function Navigation({ router }) {
   const [display, setDisplay] = useState(false)
 
   return (
-    <header className='flex flex-row items-center justify-between mb-4'>
+    <header className='flex flex-row items-center justify-between mb-4 relative'>
       <div className='site'>
         <h1 aria-label='site-name' className='font-semibold'>
           Componentity
@@ -27,7 +27,7 @@ function Navigation({ router }) {
       <div
         className={`${
           display ? 'block' : 'hidden'
-        } z-10 absolute -ml-4 mt-12 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2`}
+        } z-10 absolute -ml-5 mt-56 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2`}
       >
         <div className='rounded-lg shadow-lg'>
           <div className='rounded-lg shadow-xs overflow-hidden'>
