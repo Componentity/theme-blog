@@ -32,7 +32,7 @@ export default Search
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`${process.env.SITE_URL}/posts?_embed=true`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/posts?_embed=true`)
   const posts = await res.json()
 
   const slugs = []
@@ -49,7 +49,7 @@ export async function getStaticPaths() {
 // This also gets called at build time
 export async function getStaticProps({ params }) {
   const { slug } = params
-  const res = await fetch(`${process.env.SITE_URL}/posts?search=${slug}&_embed=true`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/posts?search=${slug}&_embed=true`)
   const blogs = await res.json()
   const total_pages = res.headers.get('X-WP-TotalPages')
 
@@ -57,10 +57,10 @@ export async function getStaticProps({ params }) {
   for (const post of blogs) {
     const post_id = post.id
     // get categories
-    const post_cats = await fetch(`${process.env.SITE_URL}/categories?post=${post_id}`)
+    const post_cats = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/categories?post=${post_id}`)
     const cats = await post_cats.json()
     // get tags
-    const post_tags = await fetch(`${process.env.SITE_URL}/tags?post=${post_id}`)
+    const post_tags = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/tags?post=${post_id}`)
     const tags = await post_tags.json()
 
     posts.push({ blog: post, cats, tags })

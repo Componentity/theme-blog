@@ -92,7 +92,7 @@ function Post({ post, cats, tags }) {
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`${process.env.SITE_URL}/posts`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/posts`)
   const posts = await res.json()
 
   const slugs = []
@@ -115,17 +115,17 @@ export async function getStaticProps({ params }) {
   // If the route is like /posts/1, then params.id is 1
   const { slug } = params
 
-  const res = await fetch(`${process.env.SITE_URL}/posts?slug=${slug}&_embed=true`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/posts?slug=${slug}&_embed=true`)
   const post = await res.json()
 
   const post_id = post[0].id
 
   // get categories
-  const post_cats = await fetch(`${process.env.SITE_URL}/categories?post=${post_id}`)
+  const post_cats = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/categories?post=${post_id}`)
   const cats = await post_cats.json()
 
   // get tags
-  const post_tags = await fetch(`${process.env.SITE_URL}/tags?post=${post_id}`)
+  const post_tags = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/tags?post=${post_id}`)
   const tags = await post_tags.json()
 
   // Pass post data to the page via props

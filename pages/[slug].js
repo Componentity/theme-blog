@@ -41,7 +41,7 @@ function Page({ page }) {
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`${process.env.SITE_URL}/pages`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/pages`)
   const pages = await res.json()
 
   const slugs = []
@@ -64,7 +64,7 @@ export async function getStaticProps({ params }) {
   // If the route is like /pages/1, then params.id is 1
   const { slug } = params
 
-  const res = await fetch(`${process.env.SITE_URL}/pages?_embed=true&slug=${slug}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/pages?_embed=true&slug=${slug}`)
   const page = await res.json()
 
   // Pass page data to the page via props

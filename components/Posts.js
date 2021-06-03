@@ -10,7 +10,7 @@ import ImageComponentity from './ImageComponentity'
 
 async function getNewPostsFromApi(page, type, type_id) {
   const res = await fetch(
-    `${process.env.SITE_URL}/posts?_embed=true&${type}=${type_id}&page=${page}`
+    `${process.env.NEXT_PUBLIC_SITE_URL}/posts?_embed=true&${type}=${type_id}&page=${page}`
   )
   const blogs = await res.json()
 
@@ -18,10 +18,10 @@ async function getNewPostsFromApi(page, type, type_id) {
   for (const post of blogs) {
     const post_id = post.id
     // get categories
-    const post_cats = await fetch(`${process.env.SITE_URL}/categories?post=${post_id}`)
+    const post_cats = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/categories?post=${post_id}`)
     const cats = await post_cats.json()
     // get tags
-    const post_tags = await fetch(`${process.env.SITE_URL}/tags?post=${post_id}`)
+    const post_tags = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/tags?post=${post_id}`)
     const tags = await post_tags.json()
 
     posts.push({ blog: post, cats, tags })
