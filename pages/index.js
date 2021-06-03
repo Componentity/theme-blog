@@ -1,5 +1,6 @@
 import React from 'react'
 import Posts from './../components/Posts'
+import Head from 'next/head'
 
 // show 2 posts of this category - done
 // show 2 posts of this author - done
