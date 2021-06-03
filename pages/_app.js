@@ -22,7 +22,17 @@ function MyApp({ Component, pageProps }) {
           <meta name='viewport' content='width=device-width, initial-scale=1.0' />
           <meta httpEquiv='X-UA-Compatible' content='IE=7' />
           <meta httpEquiv='X-UA-Compatible' content='ie=edge' />
+          <meta name='robots' content='index,follow' />
+          <meta name='googlebot' content='index,follow' />
+          <meta name='twitter:card' content='summary_large_image' />
+          <meta name='twitter:site' content='@componentity' />
+          <meta name='twitter:creator' content='@componentity' />
+          <meta property='og:url' content='http://theme-blog.vercel.app/' />
+          <meta property='og:type' content='website' />
+          <meta property='og:locale' content='en_US' />
+          <meta property='og:site_name' content='Componentity' />
         </Head>
+
         <Layout>
           <Component {...pageProps} />
         </Layout>

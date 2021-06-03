@@ -5,6 +5,8 @@ import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
 import SVGCategory from './../../components/SVG/SVGCategory'
 import SVGAuthor from './../../components/SVG/SVGAuthor'
 import SVGClock from './../../components/SVG/SVGClock'
+import Head from 'next/head'
+import ReactHtmlParser from 'react-html-parser'
 
 function Post({ post, cats, tags }) {
   const router = useRouter()
@@ -21,6 +23,7 @@ function Post({ post, cats, tags }) {
         <h1>Not found</h1>
       ) : (
         <div className='mb-10 rounded overflow-hidden flex flex-col mx-auto'>
+          <Head>{ReactHtmlParser(post[0].yoast_head)}</Head>
           <header>
             <h1 className='text-4xl font-bold mb-4 dark:text-gray-50'>{post[0].title.rendered}</h1>
             <hr />

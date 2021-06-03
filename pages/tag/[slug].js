@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import Posts from './../../components/Posts'
 import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
+import Head from 'next/head'
+import ReactHtmlParser from 'react-html-parser'
 
 function Tag({ tags, posts, tag_id, total_pages }) {
   const router = useRouter()
@@ -17,10 +19,13 @@ function Tag({ tags, posts, tag_id, total_pages }) {
         <h1>My Custom 404 Page</h1>
       ) : (
         <div>
-          <h1 className='text-xl font-bold uppercase mb-2'>{tags[0].name}</h1>
-          <hr className='mb-2 w-40 h-2' />
-          <article dangerouslySetInnerHTML={{ __html: tags[0].description }} />
-          <hr className='my-4' />
+          <Head>{ReactHtmlParser(tags[0].yoast_head)}</Head>
+          <header>
+            <h1 className='text-xl font-bold uppercase mb-2'>{tags[0].name}</h1>
+            <hr className='mb-2 w-40 h-2' />
+            <article dangerouslySetInnerHTML={{ __html: tags[0].description }} />
+            <hr className='my-4' />
+          </header>
           <Posts
             posts={posts}
             type='tags'

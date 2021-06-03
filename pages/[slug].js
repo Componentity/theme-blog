@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import ResponsiveArticle from './../components/skeleton/ResponsiveArticle'
 import ImageComponentity from './../components/ImageComponentity'
+import Head from 'next/head'
+import ReactHtmlParser from 'react-html-parser'
 
 function Page({ page }) {
   const router = useRouter()
@@ -17,6 +19,7 @@ function Page({ page }) {
         <h1>Not found</h1>
       ) : (
         <div>
+          <Head>{ReactHtmlParser(page[0].yoast_head)}</Head>
           <header>
             <h1>{page[0].title.rendered}</h1>
             <hr />

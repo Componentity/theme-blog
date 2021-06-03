@@ -13,10 +13,12 @@ function Search({ posts, slug, total_pages }) {
 
   return (
     <>
+      <header>
+        <h1 className='text-xl font-bold uppercase mb-2'>#{slug}</h1>
+        <hr className='my-4' />
+      </header>
       <Posts
         posts={posts}
-        title={slug}
-        slug={slug}
         type='search'
         type_id={slug}
         totalPages={total_pages}
