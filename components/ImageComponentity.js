@@ -1,8 +1,10 @@
 import React from 'react'
 import Image from 'next/image'
 
-export default function ImageComponentity({ src, alt, height = 400, width = 600 }) {
+export default function ImageComponentity({ src, alt, height = 400, width = 708 }) {
   return (
-    <Image height={height} width={width} priority='true' layout='responsive' src={src} alt={alt} />
+    <div className='relative item-detail'>
+      <Image objectFit={'contain'} priority='true' layout='responsive' src={src} alt={alt} />
+    </div>
   )
 }
