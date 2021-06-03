@@ -8,14 +8,33 @@ export default function Blog(postsContainer) {
   return Object.entries(postsContainer).map((container) => {
     // console.log('CONTAINER', container)
     return (
-      <Posts
-        key={Math.random().toString(36).substring(7)}
-        title={container[1].name}
-        slug={container[1].slug}
-        type={container[1].type}
-        type_id={container[1].type_id}
-        posts={container[1].posts}
-      />
+      <>
+        <Head>
+          <title>WP-NextJs Theme</title>
+          <meta name='description' content='Componentity Team has made a WP-NEXTJS theme' />
+          <meta httpEquiv='Content-Type' content='text/html;charset=UTF-8' />
+          <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+          <meta httpEquiv='X-UA-Compatible' content='IE=7' />
+          <meta httpEquiv='X-UA-Compatible' content='ie=edge' />
+          <meta name='robots' content='index,follow' />
+          <meta name='googlebot' content='index,follow' />
+          <meta name='twitter:card' content='summary_large_image' />
+          <meta name='twitter:site' content='@componentity' />
+          <meta name='twitter:creator' content='@componentity' />
+          <meta property='og:url' content='http://theme-blog.vercel.app/' />
+          <meta property='og:type' content='website' />
+          <meta property='og:locale' content='en_US' />
+          <meta property='og:site_name' content='Componentity' />
+        </Head>
+        <Posts
+          key={Math.random().toString(36).substring(7)}
+          title={container[1].name}
+          slug={container[1].slug}
+          type={container[1].type}
+          type_id={container[1].type_id}
+          posts={container[1].posts}
+        />
+      </>
     )
   })
 }
