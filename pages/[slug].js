@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import ResponsiveArticle from './../components/skeleton/ResponsiveArticle'
-import ImageComponentity from './ImageComponentity'
+import ImageComponentity from './../components/ImageComponentity'
 
 function Page({ page }) {
   const router = useRouter()
