@@ -38,7 +38,7 @@ export default Category
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/categories`)
+  const res = await fetch(`${process.env.SITE_URL}/categories`)
   const categories = await res.json()
 
   const slugs = []
@@ -55,7 +55,7 @@ export async function getStaticPaths() {
 // This also gets called at build time
 export async function getStaticProps({ params }) {
   const { slug } = params
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/categories?slug=${slug}`)
+  const res = await fetch(`${process.env.SITE_URL}/categories?slug=${slug}`)
   const categories = await res.json()
 
   // get posts of this category
@@ -66,7 +66,7 @@ export async function getStaticProps({ params }) {
   if (categories.length > 0) {
     category_id = categories[0].id
     const cat_posts = await fetch(
-      `https://reporterly.net/wp-json/wp/v2/posts?categories=${category_id}&_embed=true`
+      `${process.env.SITE_URL}/posts?categories=${category_id}&_embed=true`
     )
     const blogs = await cat_posts.json()
     total_pages = cat_posts.headers.get('X-WP-TotalPages')
@@ -74,12 +74,10 @@ export async function getStaticProps({ params }) {
     for (const post of blogs) {
       const post_id = post.id
       // get categories
-      const post_cats = await fetch(
-        `https://reporterly.net/wp-json/wp/v2/categories?post=${post_id}`
-      )
+      const post_cats = await fetch(`${process.env.SITE_URL}/categories?post=${post_id}`)
       const cats = await post_cats.json()
       // get tags
-      const post_tags = await fetch(`https://reporterly.net/wp-json/wp/v2/tags?post=${post_id}`)
+      const post_tags = await fetch(`${process.env.SITE_URL}/tags?post=${post_id}`)
       const tags = await post_tags.json()
 
       posts.push({ blog: post, cats, tags })

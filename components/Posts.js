@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Image from 'next/image'
 import ResponsiveArticle from './skeleton/ResponsiveArticle'
 import SVGCategory from './SVG/SVGCategory'
 import SVGAuthor from './SVG/SVGAuthor'
 import SVGClock from './SVG/SVGClock'
 import SVGReload from './SVG/SVGReload'
+import ImageComponentity from './ImageComponentity'
 
 async function getNewPostsFromApi(page, type, type_id) {
   const res = await fetch(
-    `https://reporterly.net/wp-json/wp/v2/posts?_embed=true&${type}=${type_id}&page=${page}`
+    `${process.env.SITE_URL}/posts?_embed=true&${type}=${type_id}&page=${page}`
   )
   const blogs = await res.json()
 
@@ -18,10 +18,10 @@ async function getNewPostsFromApi(page, type, type_id) {
   for (const post of blogs) {
     const post_id = post.id
     // get categories
-    const post_cats = await fetch(`https://reporterly.net/wp-json/wp/v2/categories?post=${post_id}`)
+    const post_cats = await fetch(`${process.env.SITE_URL}/categories?post=${post_id}`)
     const cats = await post_cats.json()
     // get tags
-    const post_tags = await fetch(`https://reporterly.net/wp-json/wp/v2/tags?post=${post_id}`)
+    const post_tags = await fetch(`${process.env.SITE_URL}/tags?post=${post_id}`)
     const tags = await post_tags.json()
 
     posts.push({ blog: post, cats, tags })
@@ -333,11 +333,7 @@ export default function Posts({
                             <a aria-label='Blog post'>
                               {blog_pack.blog.featured_media != 0 &&
                               blog_pack.blog.featured_media ? (
-                                <Image
-                                  height={400}
-                                  width={668}
-                                  priority='true'
-                                  layout='responsive'
+                                <ImageComponentity
                                   src={blog_pack.blog._embedded['wp:featuredmedia'][0].source_url}
                                   alt={blog_pack.blog.title.rendered}
                                 />
@@ -353,7 +349,7 @@ export default function Posts({
                           >
                             <a
                               aria-label='Author'
-                              className='group hidden absolute z-10 text-xs absolute bottom-0 left-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex flex-row gap-1 items-center'
+                              className='group absolute z-10 text-xs bottom-0 left-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex flex-row gap-1 items-center'
                             >
                               <SVGAuthor />
                               <span>{blog_pack.blog._embedded.author[0].name}</span>

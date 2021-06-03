@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import ResponsiveArticle from './../components/skeleton/ResponsiveArticle'
+import ImageComponentity from './ImageComponentity'
 
 function Page({ page }) {
   const router = useRouter()
@@ -20,12 +21,8 @@ function Page({ page }) {
             <h1>{page[0].title.rendered}</h1>
             <hr />
           </header>
-          {page[0].featured_media && page[0].featured_media !== 0 ? (
-            <Image
-              height={400}
-              width={668}
-              priority='true'
-              layout='responsive'
+          {page[0].featured_media != 0 && page[0].featured_media ? (
+            <ImageComponentity
               src={page[0]._embedded['wp:featuredmedia'][0].source_url}
               alt={page[0].title.rendered}
             />
@@ -41,7 +38,7 @@ function Page({ page }) {
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/pages`)
+  const res = await fetch(`${process.env.SITE_URL}/pages`)
   const pages = await res.json()
 
   const slugs = []
@@ -64,7 +61,7 @@ export async function getStaticProps({ params }) {
   // If the route is like /pages/1, then params.id is 1
   const { slug } = params
 
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/pages?_embeded=true&slug=${slug}`)
+  const res = await fetch(`${process.env.SITE_URL}/pages?_embed=true&slug=${slug}`)
   const page = await res.json()
 
   // Pass page data to the page via props

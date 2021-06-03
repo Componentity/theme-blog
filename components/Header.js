@@ -9,8 +9,8 @@ import SearchForm from './SearchForm'
 function Header({ router }) {
   const navs = [
     { text: 'Home', href: '/' },
-    { text: 'About Us', href: '/about-us' },
-    { text: 'Contact Us', href: '/contact-us' }
+    { text: 'Mcgivney Festival', href: '/mcgivneyfestival' },
+    { text: 'Catholic App', href: '/catholic-app' }
   ]
 
   const [display, setDisplay] = useState(false)

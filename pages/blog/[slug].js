@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Image from 'next/image'
+import ImageComponentity from './../../components/ImageComponentity'
 import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
 import SVGCategory from './../../components/SVG/SVGCategory'
 import SVGAuthor from './../../components/SVG/SVGAuthor'
@@ -55,10 +55,7 @@ function Post({ post, cats, tags }) {
             </div>
           </header>
           {post[0].featured_media != 0 && post[0].featured_media ? (
-            <Image
-              height={400}
-              width={768}
-              layout='responsive'
+            <ImageComponentity
               src={post[0]._embedded['wp:featuredmedia'][0].source_url}
               alt={post[0].title.rendered}
             />
@@ -92,7 +89,7 @@ function Post({ post, cats, tags }) {
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/posts`)
+  const res = await fetch(`${process.env.SITE_URL}/posts`)
   const posts = await res.json()
 
   const slugs = []
@@ -115,17 +112,17 @@ export async function getStaticProps({ params }) {
   // If the route is like /posts/1, then params.id is 1
   const { slug } = params
 
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/posts?slug=${slug}&_embed=true`)
+  const res = await fetch(`${process.env.SITE_URL}/posts?slug=${slug}&_embed=true`)
   const post = await res.json()
 
   const post_id = post[0].id
 
   // get categories
-  const post_cats = await fetch(`https://reporterly.net/wp-json/wp/v2/categories?post=${post_id}`)
+  const post_cats = await fetch(`${process.env.SITE_URL}/categories?post=${post_id}`)
   const cats = await post_cats.json()
 
   // get tags
-  const post_tags = await fetch(`https://reporterly.net/wp-json/wp/v2/tags?post=${post_id}`)
+  const post_tags = await fetch(`${process.env.SITE_URL}/tags?post=${post_id}`)
   const tags = await post_tags.json()
 
   // Pass post data to the page via props
