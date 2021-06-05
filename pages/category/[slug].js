@@ -1,5 +1,8 @@
 import { useRouter } from 'next/router'
 import Posts from './../../components/Posts'
+import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
+import Head from 'next/head'
+import ReactHtmlParser from 'react-html-parser'
 
 function Category({ categories, posts, category_id, total_pages }) {
   const router = useRouter()
@@ -7,7 +10,7 @@ function Category({ categories, posts, category_id, total_pages }) {
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <ResponsiveArticle />
   }
 
   return (
@@ -16,10 +19,13 @@ function Category({ categories, posts, category_id, total_pages }) {
         <h1>My Custom 404 Page</h1>
       ) : (
         <div>
-          <h1>{categories[0].name}</h1>
-          <hr />
-          <article dangerouslySetInnerHTML={{ __html: categories[0].description }} />
-          <hr />
+          <Head>{ReactHtmlParser(categories[0].yoast_head)}</Head>
+          <header>
+            <h1 className='text-xl font-bold uppercase mb-2'>{categories[0].name}</h1>
+            <hr className='mb-2 h-2 w-40' />
+            <article dangerouslySetInnerHTML={{ __html: categories[0].description }} />
+            <hr className='my-4' />
+          </header>
           <Posts
             posts={posts}
             type='categories'
@@ -37,7 +43,7 @@ export default Category
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/categories`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/categories`)
   const categories = await res.json()
 
   const slugs = []
@@ -54,20 +60,35 @@ export async function getStaticPaths() {
 // This also gets called at build time
 export async function getStaticProps({ params }) {
   const { slug } = params
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/categories?slug=${slug}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/categories?slug=${slug}`)
   const categories = await res.json()
 
   // get posts of this category
-  let posts = null
   let category_id = null
   let total_pages = null
+  let posts = []
+
   if (categories.length > 0) {
     category_id = categories[0].id
     const cat_posts = await fetch(
-      `https://reporterly.net/wp-json/wp/v2/posts?categories=${category_id}&_embed=true`
+      `${process.env.NEXT_PUBLIC_SITE_URL}/posts?categories=${category_id}&_embed=true`
     )
-    posts = await cat_posts.json()
+    const blogs = await cat_posts.json()
     total_pages = cat_posts.headers.get('X-WP-TotalPages')
+
+    for (const post of blogs) {
+      const post_id = post.id
+      // get categories
+      const post_cats = await fetch(
+        `${process.env.NEXT_PUBLIC_SITE_URL}/categories?post=${post_id}`
+      )
+      const cats = await post_cats.json()
+      // get tags
+      const post_tags = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/tags?post=${post_id}`)
+      const tags = await post_tags.json()
+
+      posts.push({ blog: post, cats, tags })
+    }
   }
 
   // Pass post data to the page via props

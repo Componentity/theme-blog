@@ -9,10 +9,21 @@
   },
   "dependencies": {
     "@appbaseio/reactivesearch": "3.18.0",
+    "@tailwindcss/line-clamp": "^0.2.1",
     "axios": "^0.21.1",
     "next": "10.2.2",
+    "next-pwa": "^5.2.21",
+    "next-themes": "0.0.14",
+    "nprogress": "^0.2.0",
     "react": "17.0.2",
+    "react-content-loader": "^6.0.3",
     "react-dom": "17.0.2",
+    "react-html-parser": "^2.0.2",
     "swr": "^0.5.6"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.2.6",
+    "postcss": "^8.3.0",
+    "tailwindcss": "^2.1.2"
   }
 }

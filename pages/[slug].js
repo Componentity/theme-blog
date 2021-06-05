@@ -1,5 +1,8 @@
 import { useRouter } from 'next/router'
-import Link from 'next/link'
+import ResponsiveArticle from './../components/skeleton/ResponsiveArticle'
+import ImageComponentity from './../components/ImageComponentity'
+import Head from 'next/head'
+import ReactHtmlParser from 'react-html-parser'
 
 function Page({ page }) {
   const router = useRouter()
@@ -7,7 +10,7 @@ function Page({ page }) {
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <ResponsiveArticle />
   }
 
   return (
@@ -16,19 +19,20 @@ function Page({ page }) {
         <h1>Not found</h1>
       ) : (
         <div>
-          <h1>{page[0].title.rendered}</h1>
-          <hr />
-          {page[0].featured_media && page[0].featured_media !== 0 ? (
-            <Image
-              height={400}
-              width={900}
+          <Head>{ReactHtmlParser(page[0].yoast_head)}</Head>
+          <header>
+            <h1>{page[0].title.rendered}</h1>
+            <hr />
+          </header>
+          {page[0].featured_media != 0 && page[0].featured_media ? (
+            <ImageComponentity
               src={page[0]._embedded['wp:featuredmedia'][0].source_url}
-              alt=''
+              alt={page[0].title.rendered}
             />
           ) : (
-            <p>No Image</p>
+            ''
           )}
-          <article dangerouslySetInnerHTML={{ __html: page[0].content.rendered }} />
+          <article>{ReactHtmlParser(page[0].content.rendered)}</article>
         </div>
       )}
     </>
@@ -37,7 +41,7 @@ function Page({ page }) {
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/pages`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/pages`)
   const pages = await res.json()
 
   const slugs = []
@@ -60,7 +64,7 @@ export async function getStaticProps({ params }) {
   // If the route is like /pages/1, then params.id is 1
   const { slug } = params
 
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/pages?_embeded=true&slug=${slug}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/pages?_embed=true&slug=${slug}`)
   const page = await res.json()
 
   // Pass page data to the page via props

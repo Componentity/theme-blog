@@ -1,5 +1,8 @@
 import { useRouter } from 'next/router'
 import Posts from './../../components/Posts'
+import ResponsiveArticle from './../../components/skeleton/ResponsiveArticle'
+import Head from 'next/head'
+import ReactHtmlParser from 'react-html-parser'
 
 function Author({ author, posts, author_id, total_pages }) {
   const router = useRouter()
@@ -7,7 +10,7 @@ function Author({ author, posts, author_id, total_pages }) {
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <ResponsiveArticle />
   }
 
   return (
@@ -16,10 +19,13 @@ function Author({ author, posts, author_id, total_pages }) {
         <h1>My Custom 404 Page</h1>
       ) : (
         <div>
-          <h1>{author[0].name}</h1>
-          <hr />
-          <article dangerouslySetInnerHTML={{ __html: author[0].description.rendered }} />
-          <hr />
+          <Head>{ReactHtmlParser(author[0].yoast_head)}</Head>
+          <header>
+            <h1 className='text-xl font-bold uppercase mb-2'>{author[0].name}</h1>
+            <hr className='mb-2 w-40 h-2' />
+            <article dangerouslySetInnerHTML={{ __html: author[0].description.rendered }} />
+            <hr className='my-4' />
+          </header>
           <Posts
             posts={posts}
             type='author'
@@ -37,7 +43,7 @@ export default Author
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/users`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/users`)
   const authors = await res.json()
 
   const slugs = []
@@ -59,20 +65,35 @@ export async function getStaticProps({ params }) {
   // params contains the post `id`.
   // If the route is like /posts/1, then params.id is 1
   const { slug } = params
-  const res = await fetch(`https://reporterly.net/wp-json/wp/v2/users?_embed=true&slug=${slug}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/users?_embed=true&slug=${slug}`)
   const author = await res.json()
 
   // get posts of this author
-  let posts = null
+  let posts = []
   let total_pages = null
   let author_id = null
+
   if (author.length > 0) {
     author_id = author[0].id
     const author_posts = await fetch(
-      `https://reporterly.net/wp-json/wp/v2/posts?author=${author_id}`
+      `${process.env.NEXT_PUBLIC_SITE_URL}/posts?_embed=true&author=${author_id}`
     )
-    posts = await author_posts.json()
+    const blogs = await author_posts.json()
     total_pages = author_posts.headers.get('X-WP-TotalPages')
+
+    for (const post of blogs) {
+      const post_id = post.id
+      // get categories
+      const post_cats = await fetch(
+        `${process.env.NEXT_PUBLIC_SITE_URL}/categories?post=${post_id}`
+      )
+      const cats = await post_cats.json()
+      // get tags
+      const post_tags = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/tags?post=${post_id}`)
+      const tags = await post_tags.json()
+
+      posts.push({ blog: post, cats, tags })
+    }
   }
   // Pass post data to the page via props
   return {

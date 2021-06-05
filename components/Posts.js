@@ -1,13 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
+import SectionTitle from './SectionTitle'
+import ResponsiveArticle from './skeleton/ResponsiveArticle'
+import SVGReload from './SVG/SVGReload'
+import GridCols from './BlogTemplates/GridCols'
+import HorizontalSmall from './BlogTemplates/HorizontalSmall'
+import HorizontalVariant from './BlogTemplates/HorizontalVariant'
 
-async function getNewPostsFromApi(page, type, type_id) {
-  const id = type_id
+async function getNewPostsFromApi(page, type, type_id, count) {
   const res = await fetch(
-    `https://reporterly.net/wp-json/wp/v2/posts?${type}=${id}&_embed=true&page=${page}`
+    `${process.env.NEXT_PUBLIC_SITE_URL}/posts?_embed=true&${type}=${type_id}&page=${page}&per_page=${count}`
   )
-  return await res.json()
+  const blogs = await res.json()
+
+  const posts = []
+  for (const post of blogs) {
+    const post_id = post.id
+    // get categories
+    const post_cats = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/categories?post=${post_id}`)
+    const cats = await post_cats.json()
+    // get tags
+    const post_tags = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/tags?post=${post_id}`)
+    const tags = await post_tags.json()
+
+    posts.push({ blog: post, cats, tags })
+  }
+
+  return posts
 }
 
 export default function Posts({
@@ -17,18 +36,22 @@ export default function Posts({
   type,
   type_id,
   totalPages = 1,
-  paginationStyle
+  paginationStyle,
+  perPage,
+  section
 }) {
   const router = useRouter()
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <ResponsiveArticle />
   }
 
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
+  // posts
+  // [{blog:post, cats, tags}, {blog:post, cats, tags}, {blog:post, cats, tags}, ]
   const [blogs, setBlogs] = useState(posts)
-  //   console.log(posts)
+  // console.log('BLOGS: POSTS.JS', blogs)
 
   const isInitialMount = useRef(true)
 
@@ -47,46 +70,52 @@ export default function Posts({
   }
 
   // trigger loadmore (update page number)
-  function updatePage() {
-    // console.log('UPDATING NUMBER...')
-    setLoading(true)
-    return setPage(page + 1)
+  function updatePage(pageNum) {
+    // console.log('UPDATING PAGE NUMBER...')
+    setPage(pageNum)
+    // console.log('PAGE UPDATEPAGE: ', page)
+    return null
   }
 
   // get more posts
   useEffect(async () => {
     if (isInitialMount.current) {
       isInitialMount.current = false
-      console.log('CURRENT')
+      // console.log('CURRENT')
     } else {
-      const newPosts = await getNewPostsFromApi(page, type, type_id)
+      // console.log('ON PAGE UPDATE SET LOADING TRUE')
+      setLoading(true)
+      const newPosts = await getNewPostsFromApi(page, type, type_id, perPage)
       if (newPosts.length > 0) {
         if (paginationStyle == 'pagination') {
           setBlogs([...newPosts])
         } else {
           setBlogs([...blogs, ...newPosts])
         }
-      } else {
-        setDisable(true)
       }
-      setLoading(false)
     }
   }, [page])
 
   useEffect(() => {
-    console.log('ON ROUTER USE EFFECT')
+    // console.log('ON ROUTER USE EFFECT')
+    // console.log('PAGE', page)
     setBlogs(posts)
-    setPage(1)
   }, [router])
 
   // disable loadmore
   useEffect(() => {
+    // console.log('ON EACH PAGE UPDATE IF PAGE === LAST PAGE SET DISABLE TRUE')
     if (page >= totalPages) {
       setDisable(true)
     }
     // console.log('Total', totalPages)
     // console.log('Current Page', page)
   }, [page])
+
+  useEffect(() => {
+    // console.log('ON EACH BLOGS UPDATE SET LOADING FALSE: ')
+    setLoading(false)
+  }, [blogs])
 
   // ========================================================
   // INFINITE SCROLLING
@@ -111,7 +140,7 @@ export default function Posts({
           // Detects when user scrolls down till the last blog
           if (pageOffset > lastBlogLoadedOffset) {
             // fetch new posts
-            updatePage()
+            updatePage(page * 1 + 1)
           }
         }
       }
@@ -137,7 +166,7 @@ export default function Posts({
   // INFINITE LOADING COMPONENT
   // ===================================
   function InfiniteLoader() {
-    return loading ? <p>Loading...</p> : ''
+    return loading ? <ResponsiveArticle /> : ''
   }
 
   // ===================================
@@ -146,9 +175,17 @@ export default function Posts({
 
   function Loadmore() {
     return (
-      <button disabled={disable} onClick={updatePage} type='button'>
-        {loading ? 'Loading...' : 'Load more'}
-      </button>
+      <>
+        {loading ? <ResponsiveArticle /> : ''}
+        <button
+          className='flex flex-row items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 w-40 h-12 rounded disabled:bg-gray-100 disabled:cursor-not-allowed'
+          disabled={disable}
+          onClick={() => updatePage(page * 1 + 1)}
+        >
+          <SVGReload />
+          {loading ? 'Loading...' : 'Load more'}
+        </button>
+      </>
     )
   }
 
@@ -160,7 +197,11 @@ export default function Posts({
     // first
     pagesArray.push(
       <li key='first'>
-        <button disabled={page == 1 ? true : false} onClick={() => setPage(1)}>
+        <button
+          className='border hidden sm:inline-block bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+          disabled={page == 1 ? true : false}
+          onClick={() => updatePage(1)}
+        >
           First
         </button>
       </li>
@@ -168,7 +209,11 @@ export default function Posts({
     // previous
     pagesArray.push(
       <li key='prev'>
-        <button disabled={page == 1 ? true : false} onClick={() => setPage(page - 1)}>
+        <button
+          className='border bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+          disabled={page == 1 ? true : false}
+          onClick={() => updatePage(page - 1)}
+        >
           Prev
         </button>
       </li>
@@ -199,7 +244,13 @@ export default function Posts({
     for (let i = start; i <= last; i++) {
       pagesArray.push(
         <li key={i}>
-          <button disabled={page == i ? true : false} onClick={() => setPage(i)}>
+          <button
+            className={`${
+              page == i ? '' : 'hidden'
+            } border sm:inline-block bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed`}
+            disabled={page == i ? true : false}
+            onClick={() => updatePage(i)}
+          >
             {i}
           </button>
         </li>
@@ -209,7 +260,11 @@ export default function Posts({
     // next
     pagesArray.push(
       <li key='next'>
-        <button disabled={page == totalPages ? true : false} onClick={() => setPage(page + 1)}>
+        <button
+          className='border bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+          disabled={page == totalPages ? true : false}
+          onClick={() => updatePage(page + 1)}
+        >
           Next
         </button>
       </li>
@@ -217,19 +272,35 @@ export default function Posts({
     // last
     pagesArray.push(
       <li key='last'>
-        <button disabled={page == totalPages ? true : false} onClick={() => setPage(totalPages)}>
+        <button
+          className='border hidden sm:inline-block bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed'
+          disabled={page == totalPages ? true : false}
+          onClick={() => updatePage(totalPages)}
+        >
           Last ({totalPages})
         </button>
       </li>
     )
 
     return (
-      <ul>
+      <ul className='inline-flex text-center'>
         {pagesArray.map((page) => {
           return page
         })}
       </ul>
     )
+  }
+
+  const BlogTemplate = (blog_pack, section, index) => {
+    switch (section.liType) {
+      case 'HorizontalSmall':
+        return <HorizontalSmall blog_pack={blog_pack} section={section} index={index} />
+      case 'HorizontalVariant':
+        return <HorizontalVariant blog_pack={blog_pack} section={section} index={index} />
+
+      default:
+        return <GridCols blog_pack={blog_pack} section={section} index={index} />
+    }
   }
 
   return (
@@ -238,29 +309,20 @@ export default function Posts({
         <h1>No Results found</h1>
       ) : (
         <div>
-          {title && slug ? (
-            <Link href={`/${type_url}/${slug}`}>
-              <a>
-                <h1>{title}</h1>
-              </a>
-            </Link>
+          {title ? <SectionTitle link={slug ? `/${type_url}/${slug}` : ''} title={title} /> : ''}
+          {loading && paginationStyle == 'pagination' ? (
+            <ResponsiveArticle />
           ) : (
-            ''
+            <ol className={`${section.olClasses}`}>
+              {blogs &&
+                blogs.map((blog_pack, index) => {
+                  return BlogTemplate(blog_pack, section, index)
+                })}
+            </ol>
           )}
-          <ol start={page * 10 - 9} className='blog-list'>
-            {blogs.map((blog) => {
-              return (
-                <li key={blog.id} className='blog'>
-                  <Link href={`/blog/${blog.slug}`}>
-                    <a>{blog.title.rendered}</a>
-                  </Link>
-                </li>
-              )
-            })}
-          </ol>
-          <hr />
-          {paginationStyle ? <Pagination type={paginationStyle} /> : ''}
-          <hr />
+          <div className='flex items-center justify-center'>
+            {paginationStyle ? <Pagination type={paginationStyle} /> : ''}
+          </div>
         </div>
       )}
     </>
