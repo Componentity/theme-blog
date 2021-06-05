@@ -12,5 +12,5 @@ module.exports = {
     backgroundColor: ({ after }) => after(['disabled']),
     cursor: ({ after }) => after(['disabled'])
   },
-  plugins: []
+  plugins: [require('@tailwindcss/line-clamp')]
 }

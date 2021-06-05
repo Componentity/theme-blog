@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .item-detail {
-  width: 768px;
-  height: 400px;
+  max-width: 768px;
+  max-height: 400px;
   overflow: hidden;
 }

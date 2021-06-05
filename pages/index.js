@@ -5,6 +5,7 @@ import Head from 'next/head'
 // show 2 posts of this category - done
 // show 2 posts of this author - done
 // show 2 posts latest - done
+
 export default function Blog(postsContainer) {
   return Object.entries(postsContainer).map((container) => {
     // console.log('CONTAINER', container)
@@ -33,7 +34,11 @@ export default function Blog(postsContainer) {
           slug={container[1].slug}
           type={container[1].type}
           type_id={container[1].type_id}
+          totalPages={container[1].total_pages}
+          paginationStyle={container[1].paginationStyle}
+          perPage={container[1].count}
           posts={container[1].posts}
+          section={container[1].section}
         />
       </>
     )
@@ -42,26 +47,42 @@ export default function Blog(postsContainer) {
 
 export async function getStaticProps() {
   // {
-  //   name: 'CATEGORY TWO',
-  //   slug: 'blog',
+  //   section: {
+  //     olClasses: 'max-w-screen-md mx-auto',
+  //     liType: 'default'
+  //   },
+  //   name: 'LIFESTYLE',
+  //   slug: 'lifestyle',
   //   type: 'categories',
-  //   type_id: 19,
+  //   type_id: 278,
   //   count: 2
-  // },
-  // {
-  //   name: 'AUTHOR',
-  //   slug: 'newsfeed',
-  //   type: 'author',
-  //   type_id: 7,
-  //   count: 2
-  // },
-  // {
-  // count: 2
   // }
 
   const sections = [
     {
-      count: 5
+      section: {
+        olClasses: 'grid grid-cols-1 sm:grid-cols-12 gap-10',
+        liType: 'HorizontalVariant',
+        imageClasses: 'h-48'
+      },
+      name: 'LIFESTYLE',
+      slug: 'lifestyle',
+      type: 'categories',
+      type_id: 278,
+      paginationStyle: 'loadmore',
+
+      count: 6
+    },
+    {
+      section: {
+        olClasses: 'grid grid-cols-3 gap-10',
+        liType: 'HorizontalSmall',
+        imageClasses: 'w-20 h-20'
+      },
+      name: 'Latest Stories',
+      paginationStyle: 'pagination',
+
+      count: 6
     }
   ]
 
@@ -71,9 +92,13 @@ export async function getStaticProps() {
     if (section.type && section.type_id) {
       args += `&${section.type}=${section.type_id}`
     }
-    // console.log('ARGS', args)
+    //console.log('ARGS', `${process.env.NEXT_PUBLIC_SITE_URL}/posts?${args}`)
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/posts?${args}`)
     const blogs = await res.json()
+    const total_pages = res.headers.get('X-WP-TotalPages')
+
+    section['total_pages'] = total_pages
     // console.log('BLOGS INDEXJS', blogs)
 
     let posts = []

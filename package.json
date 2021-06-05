@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@appbaseio/reactivesearch": "3.18.0",
+    "@tailwindcss/line-clamp": "^0.2.1",
     "axios": "^0.21.1",
     "next": "10.2.2",
     "next-pwa": "^5.2.21",

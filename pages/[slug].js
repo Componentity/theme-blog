@@ -32,7 +32,7 @@ function Page({ page }) {
           ) : (
             ''
           )}
-          <article dangerouslySetInnerHTML={{ __html: page[0].content.rendered }} />
+          <article>{ReactHtmlParser(page[0].content.rendered)}</article>
         </div>
       )}
     </>

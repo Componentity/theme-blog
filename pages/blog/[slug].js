@@ -65,10 +65,9 @@ function Post({ post, cats, tags }) {
           ) : (
             ''
           )}
-          <div
-            className='text-gray-700 py-5 text-base leading-8 dark:text-gray-300'
-            dangerouslySetInnerHTML={{ __html: post[0].content.rendered }}
-          />
+          <div className='text-gray-700 py-5 text-base leading-8 dark:text-gray-300'>
+            {ReactHtmlParser(post[0].content.rendered)}
+          </div>
           <hr />
           {tags.length > 0 && (
             <span className='flex flex-row items-center hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-600'>
